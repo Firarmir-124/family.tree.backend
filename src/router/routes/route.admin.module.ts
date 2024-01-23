@@ -6,6 +6,7 @@ import { ProposalModule } from '../../modules/proposal/proposal.module';
 import { DictionaryModule } from '../../modules/dictionary/dictionary.module';
 import { DictionaryAdminController } from '../../modules/dictionary/controllers/dictionary.admin.controller';
 import { CommonAdminController } from '../../modules/common/controllers/common.admin.controller';
+import { PageAdminController } from '../../modules/page/controllers/page.admin.controller';
 
 @Module({
   imports: [UserModule, ProposalModule, DictionaryModule],
@@ -14,6 +15,7 @@ import { CommonAdminController } from '../../modules/common/controllers/common.a
     ProposalAdminController,
     DictionaryAdminController,
     CommonAdminController,
+    PageAdminController,
   ],
   providers: [],
 })
