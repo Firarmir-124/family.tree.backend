@@ -7,14 +7,23 @@ import { DictionaryPublicController } from '../../modules/dictionary/controllers
 import { PagePublicController } from '../../modules/page/controllers/page.public.controller';
 import { InformationPublicController } from '../../modules/information/controllers/information.public.controller';
 import { InformationModule } from '../../modules/information/information.module';
+import { UsefulResourcesPublicController } from '../../modules/useful-resources/controllers/useful-resources.public.controller';
+import { UsefulResourcesModule } from '../../modules/useful-resources/useful-resources.module';
 
 @Module({
-  imports: [UserModule, ProposalModule, DictionaryModule, InformationModule],
+  imports: [
+    UserModule,
+    ProposalModule,
+    DictionaryModule,
+    InformationModule,
+    UsefulResourcesModule,
+  ],
   controllers: [
     ProposalPublicController,
     DictionaryPublicController,
     PagePublicController,
     InformationPublicController,
+    UsefulResourcesPublicController,
   ],
   providers: [],
 })
