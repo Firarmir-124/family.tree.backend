@@ -1,7 +1,7 @@
-import { Body, Controller, Post, UnauthorizedException } from "@nestjs/common";
-import { ApiBody, ApiTags } from "@nestjs/swagger";
-import { AuthService } from "../services/auth.service";
-import { JwtService } from "@nestjs/jwt";
+import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { AuthService } from '../services/auth.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller({
   version: '1',
@@ -9,7 +9,6 @@ import { JwtService } from "@nestjs/jwt";
 })
 @ApiTags('public.auth')
 export class AuthController {
-
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,

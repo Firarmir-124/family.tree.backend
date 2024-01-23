@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProposalDto } from '../dto/create-proposal.dto';
 import { UpdateProposalDto } from '../dto/update-proposal.dto';
-import { ProposalEntity } from "../entities/proposal.entity";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { HelperNumberService } from "../../../helpers/services/helper.number.service";
-import axios from "axios";
+import { ProposalEntity } from '../entities/proposal.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { HelperNumberService } from '../../../helpers/services/helper.number.service';
+import axios from 'axios';
 
 @Injectable()
 export class ProposalService {
@@ -13,8 +13,7 @@ export class ProposalService {
     @InjectModel(ProposalEntity.name)
     private readonly proposalModel: Model<ProposalEntity>,
     private readonly helperNumber: HelperNumberService,
-  ) {
-  }
+  ) {}
   async create(info: CreateProposalDto) {
     const proposal = await this.proposalModel.create({
       ...info,
@@ -42,7 +41,10 @@ export class ProposalService {
       },
     };
     //https://b24-n5908757a5bb3c.bitrix24.ru/rest/25982/ef1kkum5jl89jgq2/crm.lead.add.json?FIELDS[TITLE]=Новый лид&FIELDS[NAME]=Иван&FIELDS[LAST_NAME]=Петров&FIELDS[EMAIL][0][VALUE]=mail@example.com&FIELDS[EMAIL][0][VALUE_TYPE]=WORK&FIELDS[PHONE][0][VALUE]=555888&FIELDS[PHONE][0][VALUE_TYPE]=WORK
-    await axios.post('https://b24-n5908757a5bb3c.bitrix24.ru/rest/25982/ef1kkum5jl89jgq2/crm.lead.add.json', fields);
+    await axios.post(
+      'https://b24-n5908757a5bb3c.bitrix24.ru/rest/25982/ef1kkum5jl89jgq2/crm.lead.add.json',
+      fields,
+    );
     return proposal;
   }
 

@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { ApiHideProperty } from "@nestjs/swagger";
+import { ApiHideProperty } from '@nestjs/swagger';
 
 export const Pagination = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {

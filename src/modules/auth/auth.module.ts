@@ -1,11 +1,11 @@
-import { Global, Module } from "@nestjs/common";
+import { Global, Module } from '@nestjs/common';
 import { AuthService } from './services/auth.service';
-import { PassportModule } from "@nestjs/passport";
-import { LocalStrategy } from "./services/local.strategy";
-import { JwtModule, JwtModuleOptions, JwtService } from "@nestjs/jwt";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { UserModule } from "../user/user.module";
-import { JwtStrategy } from "./services/jwt.strategy";
+import { PassportModule } from '@nestjs/passport';
+import { LocalStrategy } from './services/local.strategy';
+import { JwtModule, JwtModuleOptions, JwtService } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from '../user/user.module';
+import { JwtStrategy } from './services/jwt.strategy';
 
 @Global()
 @Module({

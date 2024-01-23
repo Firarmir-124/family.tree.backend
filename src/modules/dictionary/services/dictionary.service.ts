@@ -1,16 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { DictionaryType } from "../interfaces/dictionary-type.interface";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { DictionaryEntity } from "../entities/dictionary.entity";
+import { Injectable } from '@nestjs/common';
+import { DictionaryType } from '../interfaces/dictionary-type.interface';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { DictionaryEntity } from '../entities/dictionary.entity';
 
 @Injectable()
 export class DictionaryService {
   constructor(
     @InjectModel(DictionaryEntity.name)
     private readonly dictionaryModel: Model<DictionaryEntity>,
-  ) {
-  }
+  ) {}
   private cache: any = {
     [DictionaryType.DISTRICT]: [],
     [DictionaryType.ESTATE_TYPE]: [],

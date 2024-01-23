@@ -2,7 +2,6 @@
 // Path: src/modules/information/entities/information.entity.ts
 // Compare this snippet from src/modules/dictionary/dictionary.module.ts:
 
-
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

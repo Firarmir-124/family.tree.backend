@@ -1,8 +1,8 @@
 // proposal entity for postgres
 // Path: src/modules/proposal/entities/proposal.entity.ts
 // Compare this snippet from src/modules/estate/entities/estate.entity.ts:
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
-import {PhotoEntity} from "../../common/entities/photo.entity";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { PhotoEntity } from '../../common/entities/photo.entity';
 
 @Entity()
 export class ProposalEntity {
@@ -24,7 +24,7 @@ export class ProposalEntity {
   @Column()
   geo: string;
 
-  @OneToMany(() => PhotoEntity, photo => photo.id)
+  @OneToMany(() => PhotoEntity, (photo) => photo.id)
   @Column()
   photos: PhotoEntity[];
 }

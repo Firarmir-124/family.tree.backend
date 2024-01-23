@@ -1,19 +1,30 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from "@nestjs/swagger";
-import { DictionaryService } from "../services/dictionary.service";
-import { DictionaryType } from "../interfaces/dictionary-type.interface";
-import { AuthGuard } from "@nestjs/passport";
-import { Pagination, PaginationDto } from "../../../helpers/decorators/pagination.decorator";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { DictionaryService } from '../services/dictionary.service';
+import { DictionaryType } from '../interfaces/dictionary-type.interface';
+import { AuthGuard } from '@nestjs/passport';
+import {
+  Pagination,
+  PaginationDto,
+} from '../../../helpers/decorators/pagination.decorator';
 
 @Controller({
   version: '1',
-  path: 'dictionary/:type'
+  path: 'dictionary/:type',
 })
 @UseGuards(AuthGuard('jwt'))
 @ApiTags('admin.dictionary')
 @ApiBearerAuth('access-token')
 export class DictionaryAdminController {
-
   constructor(private readonly dictionaryService: DictionaryService) {}
 
   @Post()
@@ -22,7 +33,7 @@ export class DictionaryAdminController {
   create(
     @Param('type') type: DictionaryType,
     @Body('key') key: string,
-    @Body('description') description: string
+    @Body('description') description: string,
   ) {
     console.log('type', type, key, description);
     return this.dictionaryService.create(type, key, description);
@@ -55,7 +66,7 @@ export class DictionaryAdminController {
     @Param('type') type: DictionaryType,
     @Param('id') id: string,
     @Body('key') key: string,
-    @Body('description') description: string
+    @Body('description') description: string,
   ) {
     return this.dictionaryService.update(id, key, description);
   }

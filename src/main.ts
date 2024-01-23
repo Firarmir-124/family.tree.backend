@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import fastifyCsrf from '@fastify/csrf-protection';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import multipart from '@fastify/multipart';
-import { ValidationPipe } from "@nestjs/common";
+import { ValidationPipe } from '@nestjs/common';
 
 export const ROOT = __dirname;
 
@@ -29,7 +29,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const config = new DocumentBuilder()
     .setTitle('ЕСКМП Api')
-    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token',
+    )
     .setDescription('API description')
     .setVersion('1.0')
     .addTag('api')

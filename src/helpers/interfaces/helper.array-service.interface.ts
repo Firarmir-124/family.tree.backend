@@ -3,7 +3,7 @@ export interface IHelperArrayService {
     list: T[][],
     start: number,
     result: T[][],
-    current: T[]
+    current: T[],
   ): T[][];
 
   getLast<T>(array: T[]): T;

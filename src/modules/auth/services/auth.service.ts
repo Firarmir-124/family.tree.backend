@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from "@nestjs/config";
+import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
-import { HelperHashService } from "../../../helpers/services/helper.hash.service";
-import { HelperDateService } from "../../../helpers/services/helper.date.service";
-import { UserEntity } from "../../user/entities/user.entity";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
+import { HelperHashService } from '../../../helpers/services/helper.hash.service';
+import { HelperDateService } from '../../../helpers/services/helper.date.service';
+import { UserEntity } from '../../user/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
-
   private readonly passwordSaltLength: number;
   constructor(
     @InjectRepository(UserEntity)
@@ -18,7 +17,8 @@ export class AuthService {
     private readonly helperDateService: HelperDateService,
     private readonly configService: ConfigService,
   ) {
-    this.passwordSaltLength = +this.configService.get<number>('PASSWORD_SALT') || 10;
+    this.passwordSaltLength =
+      +this.configService.get<number>('PASSWORD_SALT') || 10;
   }
 
   async validateUser(username: string, pass: string): Promise<any> {
@@ -55,7 +55,9 @@ export class AuthService {
   generateToken(userId: string, username: string): string {
     const payload = { sub: userId, username };
     console.log('payload', payload);
-    return jwt.sign(payload, this.configService.get('JWT_SECRET'), { expiresIn: this.configService.get('JWT_EXPIRES_IN') });
+    return jwt.sign(payload, this.configService.get('JWT_SECRET'), {
+      expiresIn: this.configService.get('JWT_EXPIRES_IN'),
+    });
   }
 
   async createSalt(length: number): Promise<string> {

@@ -1,6 +1,6 @@
-import {Injectable} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
-import { IHelperArrayService } from "../interfaces/helper.array-service.interface";
+import { IHelperArrayService } from '../interfaces/helper.array-service.interface';
 
 @Injectable()
 export class HelperArrayService implements IHelperArrayService {
@@ -8,15 +8,12 @@ export class HelperArrayService implements IHelperArrayService {
     list: T[][],
     start = 0,
     result: T[][] = [],
-    current: T[] = []
+    current: T[] = [],
   ): T[][] {
     if (start === list.length) result.push(current);
     else
       list[start].forEach((item) =>
-        this.getCombinations(list, start + 1, result, [
-          ...current,
-          item,
-        ])
+        this.getCombinations(list, start + 1, result, [...current, item]),
       );
 
     return result;

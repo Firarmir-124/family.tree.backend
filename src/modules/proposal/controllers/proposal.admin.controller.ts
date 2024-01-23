@@ -1,10 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ProposalService } from '../services/proposal.service';
 import { CreateProposalDto } from '../dto/create-proposal.dto';
 import { UpdateProposalDto } from '../dto/update-proposal.dto';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { AuthGuard } from "@nestjs/passport";
-import { Pagination, PaginationDto } from "../../../helpers/decorators/pagination.decorator";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import {
+  Pagination,
+  PaginationDto,
+} from '../../../helpers/decorators/pagination.decorator';
 
 @Controller({
   version: '1',

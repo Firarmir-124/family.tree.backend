@@ -52,9 +52,7 @@ export class UserService {
   async update(id: number, info: UpdateUserDto) {
     const user: { salt: string } & UpdateUserDto = { salt: '', ...info };
     if (info.password) {
-      const password = await this.authService.createPassword(
-        info.password
-      );
+      const password = await this.authService.createPassword(info.password);
       user.password = password.passwordHash;
       user.salt = password.salt;
     }

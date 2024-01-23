@@ -1,6 +1,6 @@
-import {Injectable} from '@nestjs/common';
-import {faker} from '@faker-js/faker';
-import { IHelperNumberService } from "../interfaces/helper.number-service.interface";
+import { Injectable } from '@nestjs/common';
+import { faker } from '@faker-js/faker';
+import { IHelperNumberService } from '../interfaces/helper.number-service.interface';
 
 @Injectable()
 export class HelperNumberService implements IHelperNumberService {
@@ -20,7 +20,7 @@ export class HelperNumberService implements IHelperNumberService {
   }
 
   randomInRange(min: number, max: number): number {
-    return faker.number.int({min, max});
+    return faker.number.int({ min, max });
   }
 
   percent(value: number, total: number): number {

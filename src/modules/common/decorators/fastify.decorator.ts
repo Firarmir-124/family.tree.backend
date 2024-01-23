@@ -1,5 +1,4 @@
-
-import { diskStorage } from "multer";
+import { diskStorage } from 'multer';
 import {
   CallHandler,
   ExecutionContext,
@@ -24,7 +23,7 @@ export function FastifyFileInterceptor(
     constructor(
       @Optional()
       @Inject('MULTER_MODULE_OPTIONS')
-        options: Multer,
+      options: Multer,
     ) {
       this.multer = (FastifyMulter as any)({ ...options, ...localOptions });
     }

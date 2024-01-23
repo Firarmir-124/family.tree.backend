@@ -2,7 +2,7 @@
 // Path: src/modules/user/entities/user.entity.ts
 
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import {UserRole} from "../interfaces/roles.enum";
+import { UserRole } from '../interfaces/roles.enum';
 
 @Entity()
 export class UserEntity {

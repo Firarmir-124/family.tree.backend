@@ -15,7 +15,7 @@ import {
   IHelperDateStartAndEnd,
   IHelperDateStartAndEndDate,
 } from '../interfaces/helper.interface';
-import { IHelperDateService } from "../interfaces/helper.date-service.interface";
+import { IHelperDateService } from '../interfaces/helper.date-service.interface';
 
 @Injectable()
 export class HelperDateService implements IHelperDateService {
@@ -32,7 +32,7 @@ export class HelperDateService implements IHelperDateService {
   diff(
     dateOne: Date,
     dateTwoMoreThanDateOne: Date,
-    options?: IHelperDateOptionsDiff
+    options?: IHelperDateOptionsDiff,
   ): number {
     const mDateOne = moment(dateOne);
     const mDateTwo = moment(dateTwoMoreThanDateOne);
@@ -65,7 +65,7 @@ export class HelperDateService implements IHelperDateService {
 
   create(
     date?: string | number | Date,
-    options?: IHelperDateOptionsCreate
+    options?: IHelperDateOptionsCreate,
   ): Date {
     const mDate = moment(date ?? undefined);
 
@@ -78,7 +78,7 @@ export class HelperDateService implements IHelperDateService {
 
   timestamp(
     date?: string | number | Date,
-    options?: IHelperDateOptionsCreate
+    options?: IHelperDateOptionsCreate,
   ): number {
     const mDate = moment(date ?? undefined);
 
@@ -90,49 +90,41 @@ export class HelperDateService implements IHelperDateService {
   }
 
   format(date: Date, options?: IHelperDateOptionsFormat): string {
-    return moment(date).format(
-      options?.format ?? ENUM_HELPER_DATE_FORMAT.DATE
-    );
+    return moment(date).format(options?.format ?? ENUM_HELPER_DATE_FORMAT.DATE);
   }
 
   forwardInMilliseconds(
     milliseconds: number,
-    options?: IHelperDateOptionsForward
+    options?: IHelperDateOptionsForward,
   ): Date {
     return moment(options?.fromDate).add(milliseconds, 'ms').toDate();
   }
 
   backwardInMilliseconds(
     milliseconds: number,
-    options?: IHelperDateOptionsBackward
+    options?: IHelperDateOptionsBackward,
   ): Date {
     return moment(options?.fromDate).subtract(milliseconds, 'ms').toDate();
   }
 
-  forwardInSeconds(
-    seconds: number,
-    options?: IHelperDateOptionsForward
-  ): Date {
+  forwardInSeconds(seconds: number, options?: IHelperDateOptionsForward): Date {
     return moment(options?.fromDate).add(seconds, 's').toDate();
   }
 
   backwardInSeconds(
     seconds: number,
-    options?: IHelperDateOptionsBackward
+    options?: IHelperDateOptionsBackward,
   ): Date {
     return moment(options?.fromDate).subtract(seconds, 's').toDate();
   }
 
-  forwardInMinutes(
-    minutes: number,
-    options?: IHelperDateOptionsForward
-  ): Date {
+  forwardInMinutes(minutes: number, options?: IHelperDateOptionsForward): Date {
     return moment(options?.fromDate).add(minutes, 'm').toDate();
   }
 
   backwardInMinutes(
     minutes: number,
-    options?: IHelperDateOptionsBackward
+    options?: IHelperDateOptionsBackward,
   ): Date {
     return moment(options?.fromDate).subtract(minutes, 'm').toDate();
   }
@@ -157,10 +149,7 @@ export class HelperDateService implements IHelperDateService {
     return moment(options?.fromDate).add(months, 'M').toDate();
   }
 
-  backwardInMonths(
-    months: number,
-    options?: IHelperDateOptionsBackward
-  ): Date {
+  backwardInMonths(months: number, options?: IHelperDateOptionsBackward): Date {
     return moment(options?.fromDate).subtract(months, 'M').toDate();
   }
 
@@ -209,25 +198,25 @@ export class HelperDateService implements IHelperDateService {
   }
 
   roundDown(date: Date, options?: IHelperDateOptionsRoundDown): Date {
-    const mDate = moment(date).set({millisecond: 0});
+    const mDate = moment(date).set({ millisecond: 0 });
 
     if (options?.hour) {
-      mDate.set({hour: 0});
+      mDate.set({ hour: 0 });
     }
 
     if (options?.minute) {
-      mDate.set({minute: 0});
+      mDate.set({ minute: 0 });
     }
 
     if (options?.second) {
-      mDate.set({second: 0});
+      mDate.set({ second: 0 });
     }
 
     return mDate.toDate();
   }
 
   getStartAndEndDate(
-    options?: IHelperDateStartAndEnd
+    options?: IHelperDateStartAndEnd,
   ): IHelperDateStartAndEndDate {
     const today = moment();
     const todayMonth = today.format(ENUM_HELPER_DATE_FORMAT.ONLY_MONTH);

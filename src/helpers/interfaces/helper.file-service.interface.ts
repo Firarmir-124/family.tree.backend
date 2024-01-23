@@ -4,22 +4,22 @@ import {
   IHelperFileRows,
   IHelperFileCreateExcelWorkbookOptions,
 } from '../interfaces/helper.interface';
-import {WorkBook} from 'xlsx';
+import { WorkBook } from 'xlsx';
 
 export interface IHelperFileService {
   createExcelWorkbook(
     rows: IHelperFileRows[],
-    options?: IHelperFileCreateExcelWorkbookOptions
+    options?: IHelperFileCreateExcelWorkbookOptions,
   ): WorkBook;
 
   writeExcelToBuffer(
     workbook: WorkBook,
-    options?: IHelperFileWriteExcelOptions
+    options?: IHelperFileWriteExcelOptions,
   ): Buffer;
 
   readExcelFromBuffer(
     file: Buffer,
-    options?: IHelperFileReadExcelOptions
+    options?: IHelperFileReadExcelOptions,
   ): IHelperFileRows[][];
 
   convertToBytes(megabytes: string): number;
