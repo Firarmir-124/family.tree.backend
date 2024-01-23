@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { RouterModule } from "./router/router.module";
 import { HelperModule } from "./helpers/helper.module";
-import { EstateModule } from "./modules/estate/estate.module";
 import { UserModule } from "./modules/user/user.module";
 import { ProposalModule } from "./modules/proposal/proposal.module";
 import { DictionaryModule } from "./modules/dictionary/dictionary.module";
 import { MulterModule } from "@nestjs/platform-express";
+import {TypeOrmModule} from "@nestjs/typeorm";
 
 @Module({
   imports: [
@@ -17,10 +16,20 @@ import { MulterModule } from "@nestjs/platform-express";
       cache: true,
       envFilePath: ['.env'],
     }),
-    MongooseModule.forRootAsync({
+    // typeorm connection to postgresql
+    TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
+        name: 'default',
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST') || 'localhost',
+        port: configService.get<number>('DB_PORT') || 5432,
+        username: configService.get<string>('DB_USERNAME') || 'postgres',
+        password: configService.get<string>('DB_PASSWORD') || 'postgres',
+        database: configService.get<string>('DB_DATABASE') || 'postgres',
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: configService.get<boolean>('DB_SYNCHRONIZE') || false,
+        logging: configService.get<boolean>('DB_LOGGING') || false,
       }),
       inject: [ConfigService],
     }),
@@ -34,7 +43,6 @@ import { MulterModule } from "@nestjs/platform-express";
     HelperModule,
     DictionaryModule,
     UserModule,
-    EstateModule,
     ProposalModule,
     AuthModule,
     RouterModule.forRoot(),

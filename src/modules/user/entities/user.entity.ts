@@ -1,149 +1,36 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { CallbackWithoutResultAndOptionalError, Document } from 'mongoose';
-import { v4 as uuidV4 } from 'uuid';
+// user entity
+// Path: src/modules/user/entities/user.entity.ts
 
-export const UserDatabaseName = 'users';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {UserRole} from "../interfaces/roles.enum";
 
-@Schema({
-  collection: UserDatabaseName,
-})
+@Entity()
 export class UserEntity {
-  @Prop({
-    type: String,
-    default: uuidV4,
-  })
-  _id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Prop({
-    sparse: true,
-    index: true,
-    trim: true,
-    type: String,
-    unique: true,
-    maxlength: 100,
-  })
-  username?: string;
+  @Column()
+  login: string;
 
-  @Prop({
-    index: true,
-    lowercase: true,
-    trim: true,
-    type: String,
-    maxlength: 50,
-  })
-  firstName: string;
-
-  @Prop({
-    index: true,
-    lowercase: true,
-    trim: true,
-    type: String,
-    maxlength: 50,
-  })
-  lastName: string;
-
-  @Prop()
-  description: string;
-
-  @Prop()
-  category: string;
-
-  @Prop()
-  email: string;
-
-  @Prop({
-    sparse: true,
-    trim: true,
-    type: String,
-    maxlength: 15,
-  })
-  mobileNumber?: string;
-
-  @Prop({
-    type: String,
-  })
+  @Column()
   password: string;
 
-  @Prop({
-    default: 0,
-    type: Number,
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.EDITOR,
   })
-  passwordAttempt: number;
+  role: UserRole;
 
-  @Prop({
-    type: String,
-  })
+  @Column()
   salt: string;
 
-  @Prop({
-    required: true,
-    default: true,
-    index: true,
-    type: Boolean,
-  })
-  isActive: boolean;
+  @Column()
+  active: boolean;
 
-  @Prop({
-    type: String,
-  })
-  department: string;
+  @Column()
+  created: Date;
 
-  @Prop({
-    default: false,
-    index: true,
-    type: Boolean,
-  })
-  inactivePermanent: boolean;
-
-  @Prop({
-    type: Date,
-  })
-  inactiveDate?: Date;
-
-  @Prop({
-    default: false,
-    index: true,
-    type: Boolean,
-  })
-  blocked: boolean;
-
-  @Prop({})
-  position: string;
-
-  @Prop({
-    required: false,
-    type: Date,
-  })
-  blockedDate?: Date;
-
-  @Prop({
-    required: false,
-    type: Date,
-  })
-  createdAt?: Date;
-
-  @Prop({
-    required: false,
-    type: Date,
-  })
-  updatedAt?: Date;
-
-  @Prop({
-    required: false,
-  })
-  photo?: string;
+  @Column()
+  updated: Date;
 }
-
-export const UserSchema = SchemaFactory.createForClass(UserEntity);
-
-export type UserDoc = UserEntity & Document;
-
-UserSchema.pre('save', function (next: CallbackWithoutResultAndOptionalError) {
-  this.username = (this.username || '').toLowerCase();
-  this.email = (this.email || '').toLowerCase();
-  this.updatedAt = new Date();
-  // this.firstName = (this.firstName || '').toLowerCase();
-  // this.lastName = (this.lastName || '').toLowerCase();
-
-  next();
-});

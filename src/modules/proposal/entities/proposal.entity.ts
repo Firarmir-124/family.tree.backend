@@ -1,53 +1,30 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { CallbackWithoutResultAndOptionalError } from "mongoose";
-import { v4 as uuidV4 } from 'uuid';
+// proposal entity for postgres
+// Path: src/modules/proposal/entities/proposal.entity.ts
+// Compare this snippet from src/modules/estate/entities/estate.entity.ts:
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
+import {PhotoEntity} from "../../common/entities/photo.entity";
 
-export const ProposalDatabaseName = 'proposals';
-
-@Schema({
-  collection: ProposalDatabaseName,
-})
+@Entity()
 export class ProposalEntity {
-  @Prop({
-    type: String,
-    default: uuidV4,
-  })
-  _id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Prop()
-  id: string;
-
-  @Prop()
+  @Column()
   name: string;
 
-  @Prop()
+  @Column()
   phone: string;
 
-  @Prop()
-  description: string;
+  @Column()
+  message: string;
 
-  @Prop({ default: false })
-  active: boolean;
+  @Column()
+  type: string;
 
-  @Prop({})
-  createdAt?: Date; // Дата добавления (опционально)
+  @Column()
+  geo: string;
 
-  @Prop({})
-  updatedAt?: Date; // Дата добавления (опционально)
+  @OneToMany(() => PhotoEntity, photo => photo.id)
+  @Column()
+  photos: PhotoEntity[];
 }
-
-export const ProposalSchema = SchemaFactory.createForClass(ProposalEntity);
-
-export type ProposalDoc = ProposalEntity & Document;
-
-ProposalSchema.pre(
-  'save',
-  function (next: CallbackWithoutResultAndOptionalError) {
-    this.updatedAt = new Date();
-    // this.email = this.email.toLowerCase();
-    // this.firstName = this.firstName.toLowerCase();
-    // this.lastName = this.lastName.toLowerCase();
-
-    next();
-  },
-);

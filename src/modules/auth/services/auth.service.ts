@@ -3,17 +3,17 @@ import { ConfigService } from "@nestjs/config";
 import * as jwt from 'jsonwebtoken';
 import { HelperHashService } from "../../../helpers/services/helper.hash.service";
 import { HelperDateService } from "../../../helpers/services/helper.date.service";
-import { InjectModel } from "@nestjs/mongoose";
 import { UserEntity } from "../../user/entities/user.entity";
-import { Model } from "mongoose";
+import {InjectRepository} from "@nestjs/typeorm";
+import {Repository} from "typeorm";
 
 @Injectable()
 export class AuthService {
 
   private readonly passwordSaltLength: number;
   constructor(
-    @InjectModel(UserEntity.name)
-    private readonly userModel: Model<UserEntity>,
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>,
     private readonly helperHashService: HelperHashService,
     private readonly helperDateService: HelperDateService,
     private readonly configService: ConfigService,
@@ -21,22 +21,32 @@ export class AuthService {
     this.passwordSaltLength = +this.configService.get<number>('PASSWORD_SALT') || 10;
   }
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.userModel.findOne({ isActive: true, username });
+  async validateUser(login: string, pass: string): Promise<any> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        active: true,
+        login,
+      },
+    });
     if (user) {
       const password = this.helperHashService.bcrypt(pass, user.salt);
       if (user.password === password) {
-        const { password, ...result } = user.toJSON();
+        const { password, ...result } = user;
         return result;
       }
     }
     return null;
   }
 
-  async validateUserById(id: string): Promise<any> {
-    const user = await this.userModel.findOne({ isActive: true, _id: id });
+  async validateUserById(id: number): Promise<any> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        active: true,
+        id,
+      },
+    });
     if (user) {
-      const { password, ...result } = user.toJSON();
+      const { password, ...result } = user;
       return result;
     }
     return null;

@@ -15,9 +15,6 @@ export class ProposalPublicController {
   }
 
   @Post('')
-  @ApiProperty({ name: 'name', type: String, required: true })
-  @ApiProperty({ name: 'phone', type: String, required: true })
-  @ApiProperty({ name: 'description', type: String, required: false })
   async create(
     @Body('name') name: string,
     @Body('phone') phone: string,
