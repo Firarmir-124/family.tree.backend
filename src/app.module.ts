@@ -20,7 +20,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        name: 'default',
         type: 'postgres',
         host: configService.get<string>('DB_HOST') || 'localhost',
         port: configService.get<number>('DB_PORT') || 5432,
