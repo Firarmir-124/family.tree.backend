@@ -2,9 +2,11 @@
 // Path: src/modules/proposal/entities/proposal.entity.ts
 // Compare this snippet from src/modules/estate/entities/estate.entity.ts:
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { PhotoEntity } from '../../common/entities/photo.entity';
+import { FilesEntity } from '../../common/entities/photo.entity';
 
-@Entity()
+@Entity({
+  name: 'proposals',
+})
 export class ProposalEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -24,8 +26,8 @@ export class ProposalEntity {
   @Column()
   geo: string;
 
-  @OneToMany(() => PhotoEntity, (photo) => photo.id)
-  photos: PhotoEntity[];
+  @OneToMany(() => FilesEntity, (photo) => photo.id)
+  photos: FilesEntity[];
 
   @Column({ default: false })
   unread: boolean;

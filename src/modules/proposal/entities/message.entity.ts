@@ -3,7 +3,9 @@
 // Compare this snippet from src/modules/estate/entities/estate.entity.ts:
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({
+  name: 'messages',
+})
 export class MessageEntity {
   @PrimaryGeneratedColumn()
   id: number;
