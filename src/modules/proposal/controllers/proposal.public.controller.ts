@@ -26,6 +26,7 @@ export class ProposalPublicController {
 
   @Post('proposal')
   async create(@Body() info: CreateProposalDto) {
+    // TODO: photo upload
     return await this.proposalService.create(info);
   }
 

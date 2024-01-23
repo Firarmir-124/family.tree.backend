@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import fastifyCsrf from '@fastify/csrf-protection';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import multipart from '@fastify/multipart';
-import { ValidationPipe } from '@nestjs/common';
+import {Logger, ValidationPipe} from '@nestjs/common';
 
 export const ROOT = __dirname;
 
@@ -17,6 +17,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
+  const logger = new Logger('bootstrap');
   app.enableCors();
   const configService = app.get(ConfigService);
   await app.register(fastifyCsrf);
@@ -39,6 +40,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+  logger.log(`starting in port: ${configService.get('PORT', 3000)}`);
   await app.listen(configService.get('PORT', 3000));
 }
 bootstrap();
