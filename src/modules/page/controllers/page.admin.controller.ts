@@ -5,16 +5,21 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  Post, UseGuards,
 } from '@nestjs/common';
 import { CreatePageRequestDto } from '../dtos/create-request.dto';
 import { UpdatePageRequestDto } from '../dtos/update-request.dto';
 import { IdParamDto } from '../../../global/dtos/id-param.dto';
+import {AuthGuard} from "@nestjs/passport";
+import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
 
 @Controller({
   version: '1',
   path: 'page',
 })
+@UseGuards(AuthGuard('jwt'))
+@ApiTags('admin.page')
+@ApiBearerAuth('access-token')
 export class PageAdminController {
   constructor() {}
 
