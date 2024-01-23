@@ -18,6 +18,7 @@ export class ProposalService {
       ...info,
       created: new Date(),
       unread: true,
+      photos: [],
     });
     return proposal;
   }
