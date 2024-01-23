@@ -7,5 +7,6 @@ import { PageService } from './services/page.service';
 @Module({
   imports: [TypeOrmModule.forFeature([PageEntity])],
   providers: [PageRepository, PageService],
+  exports: [PageRepository, PageService],
 })
 export class PageModule {}
