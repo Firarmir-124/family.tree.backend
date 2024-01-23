@@ -71,7 +71,7 @@ export class UserAdminController {
     description: 'Returns the user with the specified ID.',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.userService.findOne(id);
   }
 
@@ -81,7 +81,7 @@ export class UserAdminController {
     description: 'The user has been successfully updated.',
   })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
@@ -91,7 +91,7 @@ export class UserAdminController {
     description: 'The user has been successfully deleted.',
   })
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.userService.remove(id);
   }
 }

@@ -25,6 +25,14 @@ export class ProposalEntity {
   geo: string;
 
   @OneToMany(() => PhotoEntity, (photo) => photo.id)
-  @Column()
   photos: PhotoEntity[];
+
+  @Column({ default: false })
+  unread: boolean;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created: Date;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  updated: Date;
 }

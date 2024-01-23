@@ -46,13 +46,7 @@ export class ProposalAdminController {
   @ApiQuery({ name: 'sort', type: String, required: false })
   @ApiQuery({ name: 'sortDir', type: String, required: false })
   findAll(@Pagination() pagination: PaginationDto) {
-    return this.proposalService.findAll(
-      {},
-      {
-        limit: pagination.perPage,
-        skip: (pagination.page - 1) * pagination.perPage,
-      },
-    );
+    return this.proposalService.findAll({});
   }
 
   @Get('total')
@@ -62,19 +56,19 @@ export class ProposalAdminController {
 
   @Patch('activate/:id')
   @ApiParam({ name: 'id', type: String })
-  activate(@Param('id') id: string) {
-    return this.proposalService.activate(id);
+  read(@Param('id') id: number) {
+    return this.proposalService.read(id);
   }
 
   @Patch('inactivate/:id')
   @ApiParam({ name: 'id', type: String })
-  deactivate(@Param('id') id: string) {
-    return this.proposalService.deactivate(id);
+  unread(@Param('id') id: number) {
+    return this.proposalService.unread(id);
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id', type: String })
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.proposalService.remove(id);
   }
 }

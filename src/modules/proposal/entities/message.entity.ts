@@ -16,4 +16,13 @@ export class MessageEntity {
 
   @Column()
   message: string;
+
+  @Column()
+  created: Date;
+
+  @Column()
+  updated: Date;
+
+  @Column()
+  unread: boolean;
 }

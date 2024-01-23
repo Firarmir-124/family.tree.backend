@@ -12,10 +12,6 @@ import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { DictionaryService } from '../services/dictionary.service';
 import { DictionaryType } from '../interfaces/dictionary-type.interface';
 import { AuthGuard } from '@nestjs/passport';
-import {
-  Pagination,
-  PaginationDto,
-} from '../../../helpers/decorators/pagination.decorator';
 
 @Controller({
   version: '1',
@@ -41,15 +37,11 @@ export class DictionaryAdminController {
 
   @Get()
   @ApiParam({ name: 'type', enum: DictionaryType })
-  @ApiBody({ type: PaginationDto })
   findAll(
     @Param('type') type: DictionaryType,
-    @Pagination() pagination: PaginationDto,
   ) {
-    return this.dictionaryService.findAll(type, {
-      skip: (pagination.page - 1) * pagination.perPage,
-      limit: pagination.perPage,
-    });
+    // TODO: pagination
+    return this.dictionaryService.findAll(type);
   }
 
   @Get('total')
@@ -64,17 +56,17 @@ export class DictionaryAdminController {
   @ApiBody({ schema: { example: { key: 'key', description: 'description' } } })
   update(
     @Param('type') type: DictionaryType,
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body('key') key: string,
-    @Body('description') description: string,
+    @Body('value') value: string,
   ) {
-    return this.dictionaryService.update(id, key, description);
+    return this.dictionaryService.update(id, key, value);
   }
 
   @Delete(':id')
   @ApiParam({ name: 'type', enum: DictionaryType })
-  @ApiParam({ name: 'id', type: String })
-  remove(@Param('type') type: DictionaryType, @Param('id') id: string) {
+  @ApiParam({ name: 'id', type: Number })
+  remove(@Param('type') type: DictionaryType, @Param('id') id: number) {
     return this.dictionaryService.remove(id);
   }
 }
