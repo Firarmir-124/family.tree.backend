@@ -1,21 +1,21 @@
-import {Injectable} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import bytes from 'bytes';
-import {ENUM_HELPER_FILE_TYPE} from '../constants/helper.enum.constant';
-import {IHelperFileService} from '../interfaces/helper.file-service.interface';
+import { ENUM_HELPER_FILE_TYPE } from '../constants/helper.enum.constant';
+import { IHelperFileService } from '../interfaces/helper.file-service.interface';
 import {
   IHelperFileWriteExcelOptions,
   IHelperFileReadExcelOptions,
   IHelperFileRows,
   IHelperFileCreateExcelWorkbookOptions,
 } from '../interfaces/helper.interface';
-import {utils, write, read, WorkBook} from 'xlsx';
-import {writeFileSync, readFileSync} from 'fs';
+import { utils, write, read, WorkBook } from 'xlsx';
+import { writeFileSync, readFileSync } from 'fs';
 
 @Injectable()
 export class HelperFileService implements IHelperFileService {
   createExcelWorkbook(
     rows: IHelperFileRows[],
-    options?: IHelperFileCreateExcelWorkbookOptions
+    options?: IHelperFileCreateExcelWorkbookOptions,
   ): WorkBook {
     // headers
     const headers = Object.keys(rows[0]);
@@ -26,11 +26,11 @@ export class HelperFileService implements IHelperFileService {
     // workbook
     const workbook = utils.book_new();
 
-    utils.sheet_add_aoa(worksheet, [headers], {origin: 'A1'});
+    utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
     utils.book_append_sheet(
       workbook,
       worksheet,
-      options?.sheetName ?? 'Sheet 1'
+      options?.sheetName ?? 'Sheet 1',
     );
 
     return workbook;
@@ -38,7 +38,7 @@ export class HelperFileService implements IHelperFileService {
 
   writeExcelToBuffer(
     workbook: WorkBook,
-    options?: IHelperFileWriteExcelOptions
+    options?: IHelperFileWriteExcelOptions,
   ): Buffer {
     // create buffer
     const buff: Buffer = write(workbook, {
@@ -52,7 +52,7 @@ export class HelperFileService implements IHelperFileService {
 
   readExcelFromBuffer(
     file: Buffer,
-    options?: IHelperFileReadExcelOptions
+    options?: IHelperFileReadExcelOptions,
   ): IHelperFileRows[][] {
     // workbook
     const workbook = read(file, {

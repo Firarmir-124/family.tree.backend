@@ -15,7 +15,7 @@ export interface IHelperDateService {
   diff(
     dateOne: Date,
     dateTwoMoreThanDateOne: Date,
-    options?: IHelperDateOptionsDiff
+    options?: IHelperDateOptionsDiff,
   ): number;
 
   check(date: string | Date | number): boolean;
@@ -26,44 +26,38 @@ export interface IHelperDateService {
 
   create(
     date?: string | number | Date,
-    options?: IHelperDateOptionsCreate
+    options?: IHelperDateOptionsCreate,
   ): Date;
 
   timestamp(
     date?: string | number | Date,
-    options?: IHelperDateOptionsCreate
+    options?: IHelperDateOptionsCreate,
   ): number;
 
   format(date: Date, options?: IHelperDateOptionsFormat): string;
 
   forwardInMilliseconds(
     milliseconds: number,
-    options?: IHelperDateOptionsForward
+    options?: IHelperDateOptionsForward,
   ): Date;
 
   backwardInMilliseconds(
     milliseconds: number,
-    options?: IHelperDateOptionsBackward
+    options?: IHelperDateOptionsBackward,
   ): Date;
 
-  forwardInSeconds(
-    seconds: number,
-    options?: IHelperDateOptionsForward
-  ): Date;
+  forwardInSeconds(seconds: number, options?: IHelperDateOptionsForward): Date;
 
   backwardInSeconds(
     seconds: number,
-    options?: IHelperDateOptionsBackward
+    options?: IHelperDateOptionsBackward,
   ): Date;
 
-  forwardInMinutes(
-    minutes: number,
-    options?: IHelperDateOptionsForward
-  ): Date;
+  forwardInMinutes(minutes: number, options?: IHelperDateOptionsForward): Date;
 
   backwardInMinutes(
     minutes: number,
-    options?: IHelperDateOptionsBackward
+    options?: IHelperDateOptionsBackward,
   ): Date;
 
   forwardInHours(hours: number, options?: IHelperDateOptionsForward): Date;
@@ -76,10 +70,7 @@ export interface IHelperDateService {
 
   forwardInMonths(months: number, options?: IHelperDateOptionsForward): Date;
 
-  backwardInMonths(
-    months: number,
-    options?: IHelperDateOptionsBackward
-  ): Date;
+  backwardInMonths(months: number, options?: IHelperDateOptionsBackward): Date;
 
   endOfMonth(date?: Date): Date;
 
@@ -96,6 +87,6 @@ export interface IHelperDateService {
   extractDate(date: string | Date | number): IHelperDateExtractDate;
 
   getStartAndEndDate(
-    options?: IHelperDateStartAndEnd
+    options?: IHelperDateStartAndEnd,
   ): IHelperDateStartAndEndDate;
 }

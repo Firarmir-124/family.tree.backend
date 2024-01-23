@@ -1,15 +1,14 @@
-import {Injectable} from "@nestjs/common";
-import {InformationEntity} from "../entities/information.entity";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
+import { Injectable } from '@nestjs/common';
+import { InformationEntity } from '../entities/information.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class InformationService {
   constructor(
     @InjectRepository(InformationEntity)
     private readonly informationRepository: Repository<InformationEntity>,
-  ) {
-  }
+  ) {}
 
   async findAll() {
     return this.informationRepository.find();

@@ -1,16 +1,15 @@
-import {Injectable} from '@nestjs/common';
-import {JwtService} from '@nestjs/jwt';
-import {AES, enc, mode, pad} from 'crypto-js';
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { AES, enc, mode, pad } from 'crypto-js';
 import {
   IHelperJwtOptions,
   IHelperJwtVerifyOptions,
 } from '../interfaces/helper.interface';
-import { IHelperEncryptionService } from "../interfaces/helper.encryption-service.interface";
+import { IHelperEncryptionService } from '../interfaces/helper.encryption-service.interface';
 
 @Injectable()
 export class HelperEncryptionService implements IHelperEncryptionService {
-  constructor(private readonly jwtService: JwtService) {
-  }
+  constructor(private readonly jwtService: JwtService) {}
 
   base64Encrypt(data: string): string {
     const buff: Buffer = Buffer.from(data, 'utf8');
@@ -29,7 +28,7 @@ export class HelperEncryptionService implements IHelperEncryptionService {
   aes256Encrypt(
     data: string | Record<string, any> | Record<string, any>[],
     key: string,
-    iv: string
+    iv: string,
   ): string {
     const cIv = enc.Utf8.parse(iv);
     const cipher = AES.encrypt(JSON.stringify(data), key, {
@@ -44,7 +43,7 @@ export class HelperEncryptionService implements IHelperEncryptionService {
   aes256Decrypt(
     encrypted: string,
     key: string,
-    iv: string
+    iv: string,
   ): string | Record<string, any> | Record<string, any>[] {
     const cIv = enc.Utf8.parse(iv);
     const cipher = AES.decrypt(encrypted, key, {
@@ -56,10 +55,7 @@ export class HelperEncryptionService implements IHelperEncryptionService {
     return JSON.parse(cipher.toString(enc.Utf8));
   }
 
-  jwtEncrypt(
-    payload: Record<string, any>,
-    options: IHelperJwtOptions
-  ): string {
+  jwtEncrypt(payload: Record<string, any>, options: IHelperJwtOptions): string {
     return this.jwtService.sign(payload, {
       secret: options.secretKey,
       expiresIn: options.expiredIn,

@@ -1,7 +1,7 @@
-import {Injectable} from '@nestjs/common';
-import {faker} from '@faker-js/faker';
-import { IHelperStringService } from "../interfaces/helper.string-service.interface";
-import { IHelperStringRandomOptions } from "../interfaces/helper.interface";
+import { Injectable } from '@nestjs/common';
+import { faker } from '@faker-js/faker';
+import { IHelperStringService } from '../interfaces/helper.string-service.interface';
+import { IHelperStringRandomOptions } from '../interfaces/helper.interface';
 
 @Injectable()
 export class HelperStringService implements IHelperStringService {
@@ -25,17 +25,17 @@ export class HelperStringService implements IHelperStringService {
   random(length: number, options?: IHelperStringRandomOptions): string {
     const rString = options?.safe
       ? faker.internet.password({
-        length,
-        memorable: true,
-        pattern: /[A-Z]/,
-        prefix: options?.prefix,
-      })
+          length,
+          memorable: true,
+          pattern: /[A-Z]/,
+          prefix: options?.prefix,
+        })
       : faker.internet.password({
-        length,
-        memorable: false,
-        pattern: /\w/,
-        prefix: options?.prefix,
-      });
+          length,
+          memorable: false,
+          pattern: /\w/,
+          prefix: options?.prefix,
+        });
 
     return options?.upperCase ? rString.toUpperCase() : rString;
   }
@@ -52,16 +52,14 @@ export class HelperStringService implements IHelperStringService {
   }
 
   checkPasswordWeak(password: string, length?: number): boolean {
-    const regex = new RegExp(
-      `^(?=.*?[A-Z])(?=.*?[a-z]).{${length ?? 8},}$`
-    );
+    const regex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z]).{${length ?? 8},}$`);
 
     return regex.test(password);
   }
 
   checkPasswordMedium(password: string, length?: number): boolean {
     const regex = new RegExp(
-      `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{${length ?? 8},}$`
+      `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{${length ?? 8},}$`,
     );
 
     return regex.test(password);
@@ -70,8 +68,8 @@ export class HelperStringService implements IHelperStringService {
   checkPasswordStrong(password: string, length?: number): boolean {
     const regex = new RegExp(
       `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${
-                length ?? 8
-            },}$`
+        length ?? 8
+      },}$`,
     );
 
     return regex.test(password);

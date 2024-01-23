@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { UserDoc, UserEntity } from "../entities/user.entity";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { AuthService } from "../../auth/services/auth.service";
+import { UserDoc, UserEntity } from '../entities/user.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Injectable()
 export class UserService {
@@ -12,17 +12,14 @@ export class UserService {
     @InjectModel(UserEntity.name)
     private readonly userModel: Model<UserEntity>,
     private readonly authService: AuthService,
-  ) {
-  }
+  ) {}
 
   async findOneByUsername(username: string): Promise<UserEntity | undefined> {
     return this.userModel.findOne({ username });
   }
 
   async create(info: CreateUserDto) {
-    const password = await this.authService.createPassword(
-      info.password || ''
-    );
+    const password = await this.authService.createPassword(info.password || '');
     return this.userModel.create({
       ...info,
       createdAt: new Date(),
@@ -74,9 +71,7 @@ export class UserService {
       delete user._id;
     }
     if (info.password) {
-      const password = await this.authService.createPassword(
-        info.password
-      );
+      const password = await this.authService.createPassword(info.password);
       user.password = password.passwordHash;
       user.salt = password.salt;
     }
