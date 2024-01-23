@@ -5,13 +5,14 @@ import {
   Get,
   Param,
   Patch,
-  Post, UseGuards,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CreatePageRequestDto } from '../dtos/create-request.dto';
 import { UpdatePageRequestDto } from '../dtos/update-request.dto';
 import { IdParamDto } from '../../../global/dtos/id-param.dto';
-import {AuthGuard} from "@nestjs/passport";
-import {ApiBearerAuth, ApiTags} from "@nestjs/swagger";
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller({
   version: '1',

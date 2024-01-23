@@ -1,6 +1,6 @@
-import {Controller, Get, Param} from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { SlugParamDto } from '../../../global/dtos/slug-param.dto';
-import {ApiTags} from "@nestjs/swagger";
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller({
   version: '1',

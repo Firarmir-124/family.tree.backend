@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InformationEntity } from '../entities/information.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateInformationReqDto } from '../dto/create-information-req.dto';
 
 @Injectable()
 export class InformationService {
@@ -10,11 +11,11 @@ export class InformationService {
     private readonly informationRepository: Repository<InformationEntity>,
   ) {}
 
-  async findAll() {
+  async findAll(find: {}, options = {}) {
     return this.informationRepository.find();
   }
 
-  async create(info: InformationEntity) {
+  async create(info: CreateInformationReqDto) {
     return this.informationRepository.save(info);
   }
 

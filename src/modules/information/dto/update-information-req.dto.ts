@@ -1,31 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
-export class CreateInformationDto {
-  @IsNotEmpty()
+export class UpdateInformationReqDto {
+  @IsOptional()
   @IsString()
   @ApiProperty({
     example: 'This is a title',
     description: 'Title of the information',
-    required: true,
+    required: false,
   })
   readonly title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @ApiProperty({
     example: 'This is a description',
     description: 'Description of the information',
-    required: true,
+    required: false,
   })
-  readonly description: string;
+  readonly content: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @ApiProperty({
-    example: 'This is a image',
-    description: 'Image of the information',
-    required: true,
+    example: 'Токтогулский район',
+    description: 'Disctrict name',
+    required: false,
   })
-  readonly image: string;
+  readonly district: string;
 }
