@@ -21,11 +21,11 @@ export class AuthService {
     this.passwordSaltLength = +this.configService.get<number>('PASSWORD_SALT') || 10;
   }
 
-  async validateUser(login: string, pass: string): Promise<any> {
+  async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersRepository.findOne({
       where: {
         active: true,
-        login,
+        username,
       },
     });
     if (user) {

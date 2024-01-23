@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ProposalService } from "./services/proposal.service";
-import { MongooseModule } from "@nestjs/mongoose";
-import { ProposalEntity, ProposalSchema } from "./entities/proposal.entity";
+import {ProposalEntity} from "./entities/proposal.entity";
+import {TypeOrmModule} from "@nestjs/typeorm";
+import {MessageEntity} from "./entities/message.entity";
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: ProposalEntity.name, schema: ProposalSchema }]),
+    TypeOrmModule.forFeature([ProposalEntity, MessageEntity]),
   ],
   controllers: [],
   providers: [ProposalService],
-  exports: [ProposalService, MongooseModule],
+  exports: [ProposalService],
 })
 export class ProposalModule {}
