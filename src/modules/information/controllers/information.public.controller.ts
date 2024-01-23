@@ -1,11 +1,22 @@
-import { Controller, Get } from '@nestjs/common';
-import { InformationService } from '../services/information.service';
+import { Controller, Get, Param } from '@nestjs/common';
+import { InformationEntity } from '../entities/information.entity';
+import { ApiTags } from '@nestjs/swagger';
+import { IdParamDto } from '../../../global/dtos/id-param.dto';
+import { ApiFindOneInformation } from '../decorators/find-one-information.decorator';
 
-@Controller({})
+@Controller({
+  version: '1',
+  path: 'information',
+})
+@ApiTags('public.information')
 export class InformationPublicController {
-  constructor(private readonly informationService: InformationService) {}
-  @Get('info')
-  async info() {
-    return this.informationService.findAll();
+  constructor() {}
+
+  @Get(':id')
+  @ApiFindOneInformation()
+  public async findOneOrFail(
+    @Param() params: IdParamDto,
+  ): Promise<InformationEntity> {
+    return {} as InformationEntity;
   }
 }

@@ -7,6 +7,6 @@ import { InformationService } from './services/information.service';
   imports: [TypeOrmModule.forFeature([InformationEntity])],
   controllers: [],
   providers: [InformationService],
-  exports: [],
+  exports: [InformationService],
 })
 export class InformationModule {}
