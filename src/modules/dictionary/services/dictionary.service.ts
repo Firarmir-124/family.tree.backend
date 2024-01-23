@@ -1,22 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { DictionaryType } from '../interfaces/dictionary-type.interface';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { DictionaryEntity } from '../entities/dictionary.entity';
+import {Repository} from "typeorm";
+import {InjectRepository} from "@nestjs/typeorm";
 
 @Injectable()
 export class DictionaryService {
   constructor(
-    @InjectModel(DictionaryEntity.name)
-    private readonly dictionaryModel: Model<DictionaryEntity>,
+    @InjectRepository(DictionaryEntity)
+    private readonly dictionaryRepository: Repository<DictionaryEntity>,
   ) {}
   private cache: any = {
     [DictionaryType.DISTRICT]: [],
-    [DictionaryType.ESTATE_TYPE]: [],
-    [DictionaryType.TAGS]: [],
-    [DictionaryType.VACANCIES]: [],
-    [DictionaryType.INFO]: [],
-    [DictionaryType.CERTS]: [],
   };
 
   async getCache(type: DictionaryType) {
@@ -26,27 +21,27 @@ export class DictionaryService {
     return this.cache[type];
   }
 
-  async create(type: DictionaryType, key: string, description: string) {
-    return this.dictionaryModel.create({
+  async create(type: DictionaryType, key: string, value: string) {
+    return this.dictionaryRepository.create({
       type,
       key,
-      description,
+      value,
     });
   }
 
-  async findAll(type: DictionaryType, options = {}) {
-    return this.dictionaryModel.find({ type }, null, options);
+  async findAll(type: DictionaryType) {
+    return this.dictionaryRepository.find({ where: { type } });
   }
 
   async getTotal(type: DictionaryType): Promise<number> {
-    return this.dictionaryModel.count({ type });
+    return this.dictionaryRepository.count({ where: { type } });
   }
 
-  async update(id: string, key: string, description: string) {
-    return this.dictionaryModel.updateOne({ _id: id }, { key, description });
+  async update(id: number, key: string, value: string) {
+    return this.dictionaryRepository.update({ id }, { key, value });
   }
 
-  async remove(id: string) {
-    return this.dictionaryModel.deleteOne({ _id: id });
+  async remove(id: number) {
+    return this.dictionaryRepository.delete({ id });
   }
 }
