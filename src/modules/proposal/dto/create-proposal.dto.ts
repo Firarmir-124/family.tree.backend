@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PhotoEntity } from '../../common/entities/photo.entity';
+import { FilesEntity } from '../../common/entities/photo.entity';
 
 export class CreateProposalDto {
   @ApiProperty({
@@ -27,5 +27,5 @@ export class CreateProposalDto {
   geo: string;
 
   @ApiProperty()
-  photos: PhotoEntity[];
+  photos: FilesEntity[];
 }

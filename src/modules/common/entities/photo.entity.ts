@@ -2,10 +2,15 @@
 
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-export class PhotoEntity {
+@Entity({
+  name: 'files',
+})
+export class FilesEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  type: string;
 
   @Column()
   name: string;

@@ -4,7 +4,9 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { UserRole } from '../interfaces/roles.enum';
 
-@Entity()
+@Entity({
+  name: 'users',
+})
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;

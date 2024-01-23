@@ -4,7 +4,9 @@
 
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({
+  name: 'dictionary',
+})
 export class DictionaryEntity {
   @PrimaryGeneratedColumn()
   id: number;
