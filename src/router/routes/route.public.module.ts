@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { UserPublicController } from '../../modules/user/controllers/user.public.controller';
 import { UserModule } from '../../modules/user/user.module';
 import { ProposalModule } from '../../modules/proposal/proposal.module';
 import { ProposalPublicController } from '../../modules/proposal/controllers/proposal.public.controller';
@@ -9,7 +8,6 @@ import { DictionaryPublicController } from '../../modules/dictionary/controllers
 @Module({
   imports: [UserModule, ProposalModule, DictionaryModule],
   controllers: [
-    UserPublicController,
     ProposalPublicController,
     DictionaryPublicController,
   ],
