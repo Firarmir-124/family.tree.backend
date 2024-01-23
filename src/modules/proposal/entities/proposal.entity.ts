@@ -27,4 +27,13 @@ export class ProposalEntity {
   @OneToMany(() => PhotoEntity, (photo) => photo.id)
   @Column()
   photos: PhotoEntity[];
+
+  @Column()
+  unread: boolean;
+
+  @Column()
+  created: Date;
+
+  @Column()
+  updated: Date;
 }

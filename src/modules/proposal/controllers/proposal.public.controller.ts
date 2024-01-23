@@ -9,21 +9,29 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ProposalService } from '../services/proposal.service';
+import {CreateProposalDto} from "../dto/create-proposal.dto";
+import {CreateMessageDto} from "../dto/create-message.dto";
+import {MessageService} from "../services/message.service";
 
 @Controller({
   version: '1',
-  path: 'proposal',
+  path: 'support',
 })
 @ApiTags('public.proposal')
 export class ProposalPublicController {
-  constructor(private readonly proposalService: ProposalService) {}
+  constructor(
+    private readonly proposalService: ProposalService,
+    private readonly messageService: MessageService,
+  ) {}
 
-  @Post('')
-  async create(
-    @Body('name') name: string,
-    @Body('phone') phone: string,
-    @Body('description') description: string,
-  ) {
-    return await this.proposalService.create({ name, phone, description });
+  @Post('proposal')
+  async create(@Body() info: CreateProposalDto) {
+    return await this.proposalService.create(info);
   }
+
+  @Post('message')
+  async createMessage(@Body() info: CreateMessageDto) {
+    return await this.messageService.create(info);
+  }
+
 }
