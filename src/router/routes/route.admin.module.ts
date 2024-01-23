@@ -9,9 +9,17 @@ import { CommonAdminController } from '../../modules/common/controllers/common.a
 import { PageAdminController } from '../../modules/page/controllers/page.admin.controller';
 import { InformationModule } from '../../modules/information/information.module';
 import { InformationAdminController } from '../../modules/information/controllers/information.admin.controller';
+import { UsefulResourcesAdminController } from '../../modules/useful-resources/controllers/useful-resources.admin.controller';
+import { UsefulResourcesModule } from '../../modules/useful-resources/useful-resources.module';
 
 @Module({
-  imports: [UserModule, ProposalModule, DictionaryModule, InformationModule],
+  imports: [
+    UserModule,
+    ProposalModule,
+    DictionaryModule,
+    InformationModule,
+    UsefulResourcesModule,
+  ],
   controllers: [
     UserAdminController,
     ProposalAdminController,
@@ -19,6 +27,7 @@ import { InformationAdminController } from '../../modules/information/controller
     CommonAdminController,
     PageAdminController,
     InformationAdminController,
+    UsefulResourcesAdminController,
   ],
   providers: [],
 })
