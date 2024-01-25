@@ -17,11 +17,6 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApiUpdateInformation } from '../decorators/update-information.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiDeleteInformation } from '../decorators/delete-information.decorator';
-import { ApiFindAllInformations } from '../decorators/find-all-information-for.decorator';
-import {
-  Pagination,
-  PaginationDto,
-} from '../../../helpers/decorators/pagination.decorator';
 import { ApiFindOneInformation } from '../decorators/find-one-information.decorator';
 import { IdParamDto } from '../../../global/dtos/id-param.dto';
 
@@ -49,30 +44,18 @@ export class InformationAdminController {
     @Param() params: IdParamDto,
     @Body() req: UpdateInformationReqDto,
   ): Promise<InformationEntity> {
-    return {} as InformationEntity;
+    return this.informationService.update(params.id, req);
   }
 
   @Delete(':id')
   @ApiDeleteInformation()
   public async delete(@Param() params: IdParamDto): Promise<void> {
-    return;
-  }
-
-  @Get()
-  @ApiFindAllInformations()
-  public async findAll(@Pagination() pagination: PaginationDto) {
-    return this.informationService.findAll(
-      {},
-      {
-        skip: (pagination.page - 1) * pagination.perPage,
-        limit: pagination.perPage,
-      },
-    );
+    await this.informationService.remove(params.id);
   }
 
   @Get(':id')
   @ApiFindOneInformation()
   public async findOneOrFail(@Param() params: IdParamDto) {
-    return {} as InformationEntity;
+    return await this.informationService.findOneOrFail(params.id);
   }
 }

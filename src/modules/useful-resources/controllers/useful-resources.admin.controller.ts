@@ -32,8 +32,10 @@ export class UsefulResourcesAdminController {
 
   @Post()
   @ApiCreateUsefulResources()
-  public async create(@Body() req: CreateUsefuleResourcesReqDto): Promise<UsefulResourcesEntity> {
-    return new UsefulResourcesEntity();
+  public async create(
+    @Body() req: CreateUsefuleResourcesReqDto,
+  ): Promise<UsefulResourcesEntity> {
+    return this.usefulResourcesService.create(req);
   }
 
   @Patch(':id')
@@ -42,12 +44,12 @@ export class UsefulResourcesAdminController {
     @Param() params: IdParamDto,
     @Body() req: UpdateUsefuleResourcesReqDto,
   ): Promise<UsefulResourcesEntity> {
-    return new UsefulResourcesEntity();
+    return this.usefulResourcesService.update(params.id, req);
   }
 
   @Delete(':id')
   @ApiDeleteUsefulResources()
   public async delete(@Param() params: IdParamDto): Promise<void> {
-    return;
+    return this.usefulResourcesService.delete(params.id);
   }
 }
