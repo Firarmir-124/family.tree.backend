@@ -9,6 +9,7 @@ import {
 } from '../../../helpers/decorators/pagination.decorator';
 import { ApiFindOneUsefulResources } from '../decorators/find-one-useful-resources.decorator';
 import { IdParamDto } from '../../../global/dtos/id-param.dto';
+import { FindAllUsefulResourceResponseDto } from '../dtos/find-all-useful-resources-response.dto';
 
 @Controller({
   path: 'useful-resources',
@@ -24,13 +25,15 @@ export class UsefulResourcesPublicController {
   @ApiFindAllUsefulResources()
   public async findAll(
     @Pagination() pagination: PaginationDto,
-  ): Promise<UsefulResourcesEntity[]> {
-    return [new UsefulResourcesEntity()];
+  ): Promise<FindAllUsefulResourceResponseDto> {
+    return this.usefulResourcesService.findAll(pagination);
   }
 
   @Get(':id')
   @ApiFindOneUsefulResources()
-  public async findOneOrFail(@Param() params: IdParamDto): Promise<UsefulResourcesEntity> {
-    return new UsefulResourcesEntity();
+  public async findOneOrFail(
+    @Param() params: IdParamDto,
+  ): Promise<UsefulResourcesEntity> {
+    return this.usefulResourcesService.findOneOrFail(params.id);
   }
 }
