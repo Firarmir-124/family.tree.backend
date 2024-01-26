@@ -9,6 +9,7 @@ import { InformationPublicController } from '../../modules/information/controlle
 import { InformationModule } from '../../modules/information/information.module';
 import { UsefulResourcesPublicController } from '../../modules/useful-resources/controllers/useful-resources.public.controller';
 import { UsefulResourcesModule } from '../../modules/useful-resources/useful-resources.module';
+import { PageModule } from '../../modules/page/page.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsefulResourcesModule } from '../../modules/useful-resources/useful-res
     DictionaryModule,
     InformationModule,
     UsefulResourcesModule,
+    PageModule,
   ],
   controllers: [
     ProposalPublicController,
@@ -24,6 +26,7 @@ import { UsefulResourcesModule } from '../../modules/useful-resources/useful-res
     PagePublicController,
     InformationPublicController,
     UsefulResourcesPublicController,
+    PagePublicController,
   ],
   providers: [],
 })

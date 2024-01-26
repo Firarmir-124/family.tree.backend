@@ -11,6 +11,7 @@ import { InformationModule } from '../../modules/information/information.module'
 import { InformationAdminController } from '../../modules/information/controllers/information.admin.controller';
 import { UsefulResourcesAdminController } from '../../modules/useful-resources/controllers/useful-resources.admin.controller';
 import { UsefulResourcesModule } from '../../modules/useful-resources/useful-resources.module';
+import { PageModule } from '../../modules/page/page.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UsefulResourcesModule } from '../../modules/useful-resources/useful-res
     DictionaryModule,
     InformationModule,
     UsefulResourcesModule,
+    PageModule,
   ],
   controllers: [
     UserAdminController,
@@ -28,6 +30,7 @@ import { UsefulResourcesModule } from '../../modules/useful-resources/useful-res
     PageAdminController,
     InformationAdminController,
     UsefulResourcesAdminController,
+    PageAdminController,
   ],
   providers: [],
 })

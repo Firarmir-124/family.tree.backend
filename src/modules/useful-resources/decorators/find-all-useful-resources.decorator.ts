@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { UsefulResourcesEntity } from '../entities/useful-resources.entity';
+import { FindAllUsefulResourceResponseDto } from '../dtos/find-all-useful-resources-response.dto';
 
 export const ApiFindAllUsefulResources = (): ReturnType<
   typeof applyDecorators
@@ -10,7 +10,6 @@ export const ApiFindAllUsefulResources = (): ReturnType<
       description: 'Find all useful-resources route',
     }),
     ApiResponse({
-      type: UsefulResourcesEntity,
-      isArray: true,
+      type: FindAllUsefulResourceResponseDto,
     }),
   );
