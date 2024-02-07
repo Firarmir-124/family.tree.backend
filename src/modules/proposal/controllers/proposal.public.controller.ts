@@ -1,17 +1,9 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Injectable,
-  Param,
-  Post,
-  Query,
-} from '@nestjs/common';
-import { ApiBody, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ProposalService } from '../services/proposal.service';
-import {CreateProposalDto} from "../dto/create-proposal.dto";
-import {CreateMessageDto} from "../dto/create-message.dto";
-import {MessageService} from "../services/message.service";
+import { CreateProposalDto } from '../dto/create-proposal.dto';
+import { CreateMessageDto } from '../dto/create-message.dto';
+import { MessageService } from '../services/message.service';
 
 @Controller({
   version: '1',
@@ -34,5 +26,4 @@ export class ProposalPublicController {
   async createMessage(@Body() info: CreateMessageDto) {
     return await this.messageService.create(info);
   }
-
 }

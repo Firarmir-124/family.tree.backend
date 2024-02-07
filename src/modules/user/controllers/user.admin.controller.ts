@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Injectable,
   Param,
   Patch,
   Post,
@@ -14,16 +13,20 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../services/user.service';
 import {
   ApiBearerAuth,
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
   ApiBody,
+  ApiHeader,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import {
   Pagination,
   PaginationDto,
 } from '../../../helpers/decorators/pagination.decorator';
+import { UserEntity } from '../entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { DeleteResult } from 'typeorm';
 
 @Controller({
   version: '1',
@@ -41,28 +44,33 @@ export class UserAdminController {
     status: 201,
     description: 'The user has been successfully created.',
   })
+  @ApiHeader({ name: 'Bear', description: 'Bearer <token>' })
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     return this.userService.create(createUserDto);
   }
 
   @ApiOperation({ summary: 'Get all Users' })
   @ApiBody({ type: PaginationDto })
   @ApiResponse({ status: 200, description: 'Returns all users.' })
+  @ApiQuery({ name: 'page', type: Number, required: false })
+  @ApiQuery({ name: 'perPage', type: Number, required: false })
+  @ApiHeader({ name: 'Bear', description: 'Bearer <token>' })
   @Get()
-  findAll(@Pagination() pagination: PaginationDto) {
-    return this.userService.findAll(
-      {},
-      {
-        skip: (pagination.page - 1) * pagination.perPage,
-        limit: pagination.perPage,
-      },
-    );
+  findAll(@Pagination() pagination: PaginationDto): Promise<UserEntity[]> {
+    return this.userService.findAll(pagination);
   }
 
+  @ApiOperation({ summary: 'Get all total' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all total users.',
+    type: Number,
+  })
+  @ApiHeader({ name: 'Bear', description: 'Bearer <token>' })
   @Get('total')
-  getTotal() {
-    return this.userService.getTotal({});
+  getTotal(): Promise<number> {
+    return this.userService.getTotal();
   }
 
   @ApiOperation({ summary: 'Get User by ID' })
@@ -70,8 +78,9 @@ export class UserAdminController {
     status: 200,
     description: 'Returns the user with the specified ID.',
   })
+  @ApiHeader({ name: 'Bear', description: 'Bearer <token>' })
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id') id: number): Promise<UserEntity> {
     return this.userService.findOne(id);
   }
 
@@ -80,8 +89,12 @@ export class UserAdminController {
     status: 200,
     description: 'The user has been successfully updated.',
   })
+  @ApiHeader({ name: 'Bear', description: 'Bearer <token>' })
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param('id') id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
     return this.userService.update(id, updateUserDto);
   }
 
@@ -90,8 +103,9 @@ export class UserAdminController {
     status: 200,
     description: 'The user has been successfully deleted.',
   })
+  @ApiHeader({ name: 'Bear', description: 'Bearer <token>' })
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  remove(@Param('id') id: number): Promise<DeleteResult> {
     return this.userService.remove(id);
   }
 }

@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { AuthService } from '../../auth/services/auth.service';
 import { UserEntity } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
+import { PaginationDto } from '../../../helpers/decorators/pagination.decorator';
 
 @Injectable()
 export class UserService {
@@ -18,7 +19,7 @@ export class UserService {
     return this.userRepository.findOne({ where: { username } });
   }
 
-  async create(info: CreateUserDto) {
+  async create(info: CreateUserDto): Promise<UserEntity> {
     const password = await this.authService.createPassword(info.password || '');
     return this.userRepository.save({
       ...info,
@@ -28,35 +29,68 @@ export class UserService {
     });
   }
 
-  async findAll(find: {}, options = {}): Promise<UserEntity[]> {
-    const users = await this.userRepository.find({ where: find });
+  async findAll(pagination: PaginationDto): Promise<UserEntity[]> {
+    const users = await this.userRepository.find({
+      where: {},
+      skip: (pagination.page - 1) * pagination.perPage,
+      take: pagination.perPage,
+    });
+
     return users.filter((user) => {
-      const { password, salt, ...filtered } = user;
-      return filtered;
+      delete user.password;
+      delete user.salt;
+      return user;
     });
   }
 
-  async getTotal(find: {}): Promise<number> {
-    return this.userRepository.count({ where: find });
+  async getTotal(): Promise<number> {
+    return this.userRepository.count({ where: {} });
   }
 
-  async findOne(id: number): Promise<any> {
+  async findOne(id: number): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id } });
-    const { password, salt, ...filtered } = user;
-    return filtered;
+
+    if (!user) {
+      throw new BadRequestException();
+    }
+
+    delete user.salt;
+    delete user.password;
+
+    return user;
   }
 
-  async update(id: number, info: UpdateUserDto) {
+  async update(id: number, info: UpdateUserDto): Promise<UserEntity> {
+    const userOne = await this.userRepository.findOne({ where: { id } });
+
+    if (!userOne) {
+      throw new BadRequestException();
+    }
+
     const user: { salt: string } & UpdateUserDto = { salt: '', ...info };
+
     if (info.password) {
       const password = await this.authService.createPassword(info.password);
       user.password = password.passwordHash;
       user.salt = password.salt;
     }
-    await this.userRepository.update({ id }, user);
+
+    const updated = await this.userRepository
+      .createQueryBuilder()
+      .update(user)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    const updatedRaw: UserEntity = updated.raw[0];
+
+    delete updatedRaw.salt;
+    delete updatedRaw.password;
+
+    return updatedRaw;
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<DeleteResult> {
     return this.userRepository.delete({ id });
   }
 }

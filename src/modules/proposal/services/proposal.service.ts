@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProposalDto } from '../dto/create-proposal.dto';
-import { UpdateProposalDto } from '../dto/update-proposal.dto';
 import { ProposalEntity } from '../entities/proposal.entity';
 import { HelperNumberService } from '../../../helpers/services/helper.number.service';
-import {Repository} from "typeorm";
-import {InjectRepository} from "@nestjs/typeorm";
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ProposalService {

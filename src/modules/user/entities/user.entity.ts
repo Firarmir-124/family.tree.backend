@@ -1,16 +1,14 @@
 // user entity
 // Path: src/modules/user/entities/user.entity.ts
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { UserRole } from '../interfaces/roles.enum';
+import { Base } from '../../common/entities/base.entity';
 
 @Entity({
   name: 'users',
 })
-export class UserEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class UserEntity extends Base {
   @Column()
   username: string;
 
@@ -29,10 +27,4 @@ export class UserEntity {
 
   @Column()
   active: boolean;
-
-  @Column()
-  created: Date;
-
-  @Column()
-  updated: Date;
 }

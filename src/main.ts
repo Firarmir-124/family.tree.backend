@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import fastifyCsrf from '@fastify/csrf-protection';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import multipart from '@fastify/multipart';
-import {Logger, ValidationPipe} from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 export const ROOT = __dirname;
 

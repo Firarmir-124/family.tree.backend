@@ -1,7 +1,7 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
-  name: 'material_groups'
+  name: 'material_groups',
 })
 export class MaterialGroupEntity {
   @PrimaryGeneratedColumn()

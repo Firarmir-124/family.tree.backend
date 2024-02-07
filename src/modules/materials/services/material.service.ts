@@ -1,11 +1,11 @@
-import {Injectable} from "@nestjs/common";
-import {InjectRepository} from "@nestjs/typeorm";
-import {MaterialEntity} from "../entities/material.entity";
-import {Repository} from "typeorm";
-import {CreateMaterialDto} from "../dto/create-material.dto";
-import {UpdateMaterialDto} from "../dto/update-material.dto";
-import {UpdateGroupDto} from "../dto/update-group.dto";
-import {MaterialGroupEntity} from "../entities/material-group.entity";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MaterialEntity } from '../entities/material.entity';
+import { Repository } from 'typeorm';
+import { CreateMaterialDto } from '../dto/create-material.dto';
+import { UpdateMaterialDto } from '../dto/update-material.dto';
+import { UpdateGroupDto } from '../dto/update-group.dto';
+import { MaterialGroupEntity } from '../entities/material-group.entity';
 
 @Injectable()
 export class MaterialService {
@@ -14,9 +14,7 @@ export class MaterialService {
     private readonly materialRepository: Repository<MaterialEntity>,
     @InjectRepository(MaterialGroupEntity)
     private readonly materialGroupRepository: Repository<MaterialGroupEntity>,
-  ) {
-
-  }
+  ) {}
   async findAll() {
     return this.materialRepository.find();
   }
@@ -47,7 +45,7 @@ export class MaterialService {
         materials: JSON.parse(group.materials).map((materialId) => {
           return materials.find((material) => material.id === materialId);
         }),
-      }
+      };
     });
   }
 

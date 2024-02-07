@@ -1,20 +1,17 @@
-import {Body, Controller, Delete, Get, Param, Post} from "@nestjs/common";
-import {ApiTags} from "@nestjs/swagger";
-import {MaterialService} from "../services/material.service";
-import {UpdateGroupDto} from "../dto/update-group.dto";
-import {CreateMaterialDto} from "../dto/create-material.dto";
-import {UpdateMaterialDto} from "../dto/update-material.dto";
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { MaterialService } from '../services/material.service';
+import { UpdateGroupDto } from '../dto/update-group.dto';
+import { CreateMaterialDto } from '../dto/create-material.dto';
+import { UpdateMaterialDto } from '../dto/update-material.dto';
 
 @Controller({
   version: '1',
-  path: 'material'
+  path: 'material',
 })
 @ApiTags('admin.material')
 export class MaterialAdminController {
-  constructor(
-    private readonly materialService: MaterialService,
-  ) {
-  }
+  constructor(private readonly materialService: MaterialService) {}
 
   @Get('')
   async findAll() {

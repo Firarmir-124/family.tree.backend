@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DictionaryType } from '../interfaces/dictionary-type.interface';
 import { DictionaryEntity } from '../entities/dictionary.entity';
-import {Repository} from "typeorm";
-import {InjectRepository} from "@nestjs/typeorm";
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class DictionaryService {

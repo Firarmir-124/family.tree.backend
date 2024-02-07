@@ -37,9 +37,7 @@ export class DictionaryAdminController {
 
   @Get()
   @ApiParam({ name: 'type', enum: DictionaryType })
-  findAll(
-    @Param('type') type: DictionaryType,
-  ) {
+  findAll(@Param('type') type: DictionaryType) {
     // TODO: pagination
     return this.dictionaryService.findAll(type);
   }

@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { ProposalService } from '../services/proposal.service';
 import { CreateProposalDto } from '../dto/create-proposal.dto';
-import { UpdateProposalDto } from '../dto/update-proposal.dto';
 import {
   ApiBearerAuth,
   ApiBody,
