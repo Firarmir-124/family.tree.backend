@@ -5,6 +5,7 @@ import { InformationEntity } from '../entities/information.entity';
 export const ApiUpdateInformation = (): ReturnType<typeof applyDecorators> =>
   applyDecorators(
     ApiOperation({
+      summary: 'Update information',
       description: 'Update information route for admin',
     }),
     ApiResponse({

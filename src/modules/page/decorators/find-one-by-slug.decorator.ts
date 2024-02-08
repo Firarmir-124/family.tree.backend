@@ -5,6 +5,7 @@ import { PageEntity } from '../entities/page.entity';
 export const ApiFindOneBySlugPage = (): ReturnType<typeof applyDecorators> =>
   applyDecorators(
     ApiOperation({
+      summary: 'findOne page slug',
       description: 'Find one page by slug route for admin',
     }),
     ApiResponse({

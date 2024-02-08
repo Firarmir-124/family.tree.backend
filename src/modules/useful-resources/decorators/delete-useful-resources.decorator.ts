@@ -6,6 +6,7 @@ export const ApiDeleteUsefulResources = (): ReturnType<
 > =>
   applyDecorators(
     ApiOperation({
+      summary: 'Delete useful-resources',
       description: 'Delete useful-resources route for admin',
     }),
     ApiResponse({

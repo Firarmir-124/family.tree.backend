@@ -5,6 +5,7 @@ import { FindAllInformationResponseDto } from '../dto/find-all-information-respo
 export const ApiFindAllInformations = (): ReturnType<typeof applyDecorators> =>
   applyDecorators(
     ApiOperation({
+      summary: 'Find all informations',
       description: 'Find all informations route for admin',
     }),
     ApiResponse({

@@ -7,6 +7,7 @@ export const ApiUpdateUsefulResources = (): ReturnType<
 > =>
   applyDecorators(
     ApiOperation({
+      summary: 'Update useful-resources',
       description: 'Update useful-resources route for admin',
     }),
     ApiResponse({

@@ -7,6 +7,7 @@ export const ApiFindAllUsefulResources = (): ReturnType<
 > =>
   applyDecorators(
     ApiOperation({
+      summary: 'Find all useful-resources',
       description: 'Find all useful-resources route',
     }),
     ApiResponse({

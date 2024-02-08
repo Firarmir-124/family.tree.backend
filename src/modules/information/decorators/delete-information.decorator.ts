@@ -4,6 +4,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 export const ApiDeleteInformation = (): ReturnType<typeof applyDecorators> =>
   applyDecorators(
     ApiOperation({
+      summary: 'Delete information',
       description: 'Delete information by id route for admin',
     }),
     ApiResponse({

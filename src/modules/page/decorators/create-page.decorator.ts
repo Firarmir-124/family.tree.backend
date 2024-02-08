@@ -5,6 +5,7 @@ import { PageEntity } from '../entities/page.entity';
 export const ApiCreatePage = (): ReturnType<typeof applyDecorators> =>
   applyDecorators(
     ApiOperation({
+      summary: 'create page',
       description: 'Create page route for admin',
     }),
     ApiResponse({

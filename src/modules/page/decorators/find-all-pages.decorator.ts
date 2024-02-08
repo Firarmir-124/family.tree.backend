@@ -5,6 +5,7 @@ import { FindAllPagesResponseDto } from '../dtos/find-all-pages-response.dto';
 export const ApiFindAllPages = (): ReturnType<typeof applyDecorators> =>
   applyDecorators(
     ApiOperation({
+      summary: 'findAll page',
       description: 'Find all Pages route for admin',
     }),
     ApiResponse({
