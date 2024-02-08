@@ -16,9 +16,7 @@ export class PageService {
 
   public async create(req: CreatePageRequestDto): Promise<PageEntity> {
     const intance = this.pageRepository.create(req);
-    const page = await this.pageRepository.save(intance);
-
-    return page;
+    return await this.pageRepository.save(intance);
   }
 
   public async update(
