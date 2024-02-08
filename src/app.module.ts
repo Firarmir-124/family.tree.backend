@@ -27,7 +27,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         password: configService.get<string>('DB_PASSWORD') || 'postgres',
         database: configService.get<string>('DB_DATABASE') || 'postgres',
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get<boolean>('DB_SYNCHRONIZE') || false,
+        synchronize: configService.get<boolean>('DB_SYNCHRONIZE') || true,
         logging: configService.get<boolean>('DB_LOGGING') || false,
       }),
       inject: [ConfigService],
