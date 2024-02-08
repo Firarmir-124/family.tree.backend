@@ -4,6 +4,7 @@ import { ProposalEntity } from '../entities/proposal.entity';
 import { HelperNumberService } from '../../../helpers/services/helper.number.service';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationDto } from '../../../helpers/decorators/pagination.decorator';
 
 @Injectable()
 export class ProposalService {
@@ -13,30 +14,36 @@ export class ProposalService {
     private readonly helperNumber: HelperNumberService,
   ) {}
   async create(info: CreateProposalDto) {
-    const proposal = await this.proposalRepository.save({
+    return await this.proposalRepository.save({
       ...info,
       created: new Date(),
       unread: true,
       photos: [],
     });
-    return proposal;
   }
 
-  async findAll(find: {}): Promise<ProposalEntity[]> {
-    return this.proposalRepository.find({ where: find });
+  async findAll(pagination: PaginationDto): Promise<ProposalEntity[]> {
+    return this.proposalRepository.find({
+      where: {},
+      skip: (pagination.page - 1) * pagination.perPage,
+      take: pagination.perPage,
+    });
   }
   async getTotal(find: {}): Promise<number> {
     return this.proposalRepository.count({ where: find });
   }
 
   async read(id: number) {
-    return this.proposalRepository.update({ id }, { unread: false });
+    await this.proposalRepository.update({ id }, { unread: false });
+    return this.proposalRepository.findOneByOrFail({ id });
   }
   async unread(id: number) {
-    return this.proposalRepository.update({ id }, { unread: true });
+    await this.proposalRepository.update({ id }, { unread: true });
+    return this.proposalRepository.findOneByOrFail({ id });
   }
 
   async remove(id: number) {
-    return this.proposalRepository.delete({ id });
+    await this.proposalRepository.delete({ id });
+    return id;
   }
 }

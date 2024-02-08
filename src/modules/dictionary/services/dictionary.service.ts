@@ -3,6 +3,7 @@ import { DictionaryType } from '../interfaces/dictionary-type.interface';
 import { DictionaryEntity } from '../entities/dictionary.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationDto } from '../../../helpers/decorators/pagination.decorator';
 
 @Injectable()
 export class DictionaryService {
@@ -29,8 +30,12 @@ export class DictionaryService {
     });
   }
 
-  async findAll(type: DictionaryType) {
-    return this.dictionaryRepository.find({ where: { type } });
+  async findAll(type: DictionaryType, pagination?: PaginationDto) {
+    return this.dictionaryRepository.find({
+      where: { type },
+      skip: (pagination.page - 1) * pagination.perPage,
+      take: pagination.perPage,
+    });
   }
 
   async getTotal(type: DictionaryType): Promise<number> {
@@ -38,10 +43,12 @@ export class DictionaryService {
   }
 
   async update(id: number, key: string, value: string) {
-    return this.dictionaryRepository.update({ id }, { key, value });
+    await this.dictionaryRepository.update({ id }, { key, value });
+    return this.dictionaryRepository.findOneByOrFail({ id });
   }
 
   async remove(id: number) {
-    return this.dictionaryRepository.delete({ id });
+    await this.dictionaryRepository.delete({ id });
+    return id;
   }
 }
