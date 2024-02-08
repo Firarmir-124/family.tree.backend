@@ -23,7 +23,7 @@ export class DictionaryService {
   }
 
   async create(type: DictionaryType, key: string, value: string) {
-    return this.dictionaryRepository.create({
+    return this.dictionaryRepository.save({
       type,
       key,
       value,
@@ -31,11 +31,13 @@ export class DictionaryService {
   }
 
   async findAll(type: DictionaryType, pagination?: PaginationDto) {
-    return this.dictionaryRepository.find({
-      where: { type },
-      skip: (pagination.page - 1) * pagination.perPage,
-      take: pagination.perPage,
-    });
+    return this.dictionaryRepository.find(
+      pagination && {
+        where: { type },
+        skip: (pagination.page - 1) * pagination.perPage,
+        take: pagination.perPage,
+      },
+    );
   }
 
   async getTotal(type: DictionaryType): Promise<number> {

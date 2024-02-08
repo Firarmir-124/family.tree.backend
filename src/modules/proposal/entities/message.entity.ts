@@ -22,6 +22,6 @@ export class MessageEntity extends Base {
   message: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ default: false })
   unread: boolean;
 }
