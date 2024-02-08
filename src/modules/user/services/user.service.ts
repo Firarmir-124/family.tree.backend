@@ -90,7 +90,8 @@ export class UserService {
     return updatedRaw;
   }
 
-  async remove(id: number): Promise<DeleteResult> {
-    return this.userRepository.delete({ id });
+  async remove(id: number): Promise<number> {
+    await this.userRepository.delete({ id });
+    return id;
   }
 }

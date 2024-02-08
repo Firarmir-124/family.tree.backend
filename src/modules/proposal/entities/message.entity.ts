@@ -1,30 +1,27 @@
 // proposal entity for postgres
 // Path: src/modules/proposal/entities/proposal.entity.ts
 // Compare this snippet from src/modules/estate/entities/estate.entity.ts:
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { Base } from '../../common/entities/base.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({
   name: 'messages',
 })
-export class MessageEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class MessageEntity extends Base {
+  @ApiProperty()
   @Column()
   name: string;
 
+  @ApiProperty()
   @Column()
   phone: string;
 
+  @ApiProperty()
   @Column()
   message: string;
 
-  @Column()
-  created: Date;
-
-  @Column()
-  updated: Date;
-
+  @ApiProperty()
   @Column()
   unread: boolean;
 }

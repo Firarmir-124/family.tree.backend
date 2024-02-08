@@ -4,17 +4,21 @@
 import { Column, Entity } from 'typeorm';
 import { UserRole } from '../interfaces/roles.enum';
 import { Base } from '../../common/entities/base.entity';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 @Entity({
   name: 'users',
 })
 export class UserEntity extends Base {
+  @ApiProperty()
   @Column()
   username: string;
 
+  @ApiHideProperty()
   @Column()
   password: string;
 
+  @ApiProperty()
   @Column({
     type: 'enum',
     enum: UserRole,
@@ -22,9 +26,11 @@ export class UserEntity extends Base {
   })
   role: UserRole;
 
+  @ApiHideProperty()
   @Column()
   salt: string;
 
+  @ApiProperty()
   @Column()
   active: boolean;
 }

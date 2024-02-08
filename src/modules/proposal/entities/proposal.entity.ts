@@ -1,44 +1,40 @@
 // proposal entity for postgres
 // Path: src/modules/proposal/entities/proposal.entity.ts
 // Compare this snippet from src/modules/estate/entities/estate.entity.ts:
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { FilesEntity } from '../../common/entities/photo.entity';
+import { Base } from '../../common/entities/base.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({
   name: 'proposals',
 })
-export class ProposalEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class ProposalEntity extends Base {
   @Column()
+  @ApiProperty()
   name: string;
 
+  @ApiProperty()
   @Column()
   phone: string;
 
+  @ApiProperty()
   @Column()
   message: string;
 
+  @ApiProperty()
   @Column()
   type: string;
 
+  @ApiProperty()
   @Column()
   geo: string;
 
+  @ApiProperty()
   @OneToMany(() => FilesEntity, (photo) => photo.id)
   photos: FilesEntity[];
 
+  @ApiProperty()
   @Column({ default: false })
   unread: boolean;
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created: Date;
-
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updated: Date;
 }

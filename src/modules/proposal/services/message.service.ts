@@ -10,8 +10,8 @@ export class MessageService {
     private readonly messageRepository: Repository<MessageEntity>,
   ) {}
 
-  async create(info: CreateMessageDto) {
-    return this.messageRepository.create({
+  async create(info: CreateMessageDto): Promise<MessageEntity> {
+    return this.messageRepository.save({
       ...info,
       created: new Date(),
     });
