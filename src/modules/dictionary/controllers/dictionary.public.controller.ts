@@ -1,5 +1,5 @@
 import { Controller, Get, HttpStatus, Param } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DictionaryService } from '../services/dictionary.service';
 import { DictionaryType } from '../interfaces/dictionary-type.interface';
 import { DictionaryEntity } from '../entities/dictionary.entity';
@@ -18,6 +18,7 @@ export class DictionaryPublicController {
     status: HttpStatus.OK,
     type: [DictionaryEntity],
   })
+  @ApiOperation({ summary: 'findAll distinct' })
   async distinct(@Param('type') type: DictionaryType) {
     return this.dictionaryService.findAll(type);
   }

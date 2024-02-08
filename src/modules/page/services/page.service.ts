@@ -47,7 +47,7 @@ export class PageService {
       },
     });
 
-    if (existedPage) {
+    if (!existedPage) {
       throw new NotFoundException(`Page with id ${pageId} not found`);
     }
 
@@ -61,7 +61,7 @@ export class PageService {
       },
     });
 
-    if (page) {
+    if (!page) {
       throw new NotFoundException(`Page with id ${pageId} not found`);
     }
 

@@ -1,5 +1,5 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProposalService } from '../services/proposal.service';
 import { CreateProposalDto } from '../dto/create-proposal.dto';
 import { CreateMessageDto } from '../dto/create-message.dto';
@@ -19,6 +19,7 @@ export class ProposalPublicController {
   ) {}
 
   @Post('proposal')
+  @ApiOperation({ summary: 'create proposal' })
   @ApiResponse({
     type: ProposalEntity,
     description: 'положительный ответ',
@@ -35,6 +36,7 @@ export class ProposalPublicController {
     description: 'положительный ответ',
     status: HttpStatus.CREATED,
   })
+  @ApiOperation({ summary: 'create message' })
   async createMessage(@Body() info: CreateMessageDto) {
     return await this.messageService.create(info);
   }
