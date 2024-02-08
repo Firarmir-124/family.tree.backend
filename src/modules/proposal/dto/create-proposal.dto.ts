@@ -18,10 +18,17 @@ export class CreateProposalDto {
 
   @ApiProperty({
     example: 'This is a proposal',
-    description: 'Description of the proposal',
+    description: 'message of the proposal',
     required: true,
   })
-  description: string;
+  message: string;
+
+  @ApiProperty({
+    example: 'This is a proposal',
+    description: 'type of the proposal',
+    required: true,
+  })
+  type: string;
 
   @ApiProperty()
   geo: string;
