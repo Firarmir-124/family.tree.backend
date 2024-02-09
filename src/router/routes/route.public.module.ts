@@ -10,6 +10,8 @@ import { InformationModule } from '../../modules/information/information.module'
 import { UsefulResourcesPublicController } from '../../modules/useful-resources/controllers/useful-resources.public.controller';
 import { UsefulResourcesModule } from '../../modules/useful-resources/useful-resources.module';
 import { PageModule } from '../../modules/page/page.module';
+import { CompanyPublicController } from '../../modules/company/controller/company.public.controller';
+import { CompanyModule } from '../../modules/company/company.module';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { PageModule } from '../../modules/page/page.module';
     InformationModule,
     UsefulResourcesModule,
     PageModule,
+    CompanyModule,
   ],
   controllers: [
     ProposalPublicController,
@@ -27,6 +30,7 @@ import { PageModule } from '../../modules/page/page.module';
     InformationPublicController,
     UsefulResourcesPublicController,
     PagePublicController,
+    CompanyPublicController,
   ],
   providers: [],
 })

@@ -12,6 +12,9 @@ import { InformationAdminController } from '../../modules/information/controller
 import { UsefulResourcesAdminController } from '../../modules/useful-resources/controllers/useful-resources.admin.controller';
 import { UsefulResourcesModule } from '../../modules/useful-resources/useful-resources.module';
 import { PageModule } from '../../modules/page/page.module';
+import { CommonModule } from '../../modules/common/common.module';
+import { CompanyModule } from '../../modules/company/company.module';
+import { CompanyAdminController } from '../../modules/company/controller/company.admin.controller';
 
 @Module({
   imports: [
@@ -21,6 +24,8 @@ import { PageModule } from '../../modules/page/page.module';
     InformationModule,
     UsefulResourcesModule,
     PageModule,
+    CommonModule,
+    CompanyModule,
   ],
   controllers: [
     UserAdminController,
@@ -31,6 +36,7 @@ import { PageModule } from '../../modules/page/page.module';
     InformationAdminController,
     UsefulResourcesAdminController,
     PageAdminController,
+    CompanyAdminController,
   ],
   providers: [],
 })
