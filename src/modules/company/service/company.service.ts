@@ -11,7 +11,7 @@ export class CompanyService {
   public async createCompany(
     createCompany: CreateCompanyDto,
   ): Promise<CompanyEntity> {
-    return this.companyRepository.save(createCompany);
+    return this.companyRepository.createCompany(createCompany);
   }
 
   public async findOneCompany(id: number): Promise<CompanyEntity> {
