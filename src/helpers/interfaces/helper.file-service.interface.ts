@@ -1,10 +1,11 @@
 import {
-  IHelperFileWriteExcelOptions,
+  IHelperFileCreateExcelWorkbookOptions,
   IHelperFileReadExcelOptions,
   IHelperFileRows,
-  IHelperFileCreateExcelWorkbookOptions,
+  IHelperFileWriteExcelOptions,
 } from '../interfaces/helper.interface';
 import { WorkBook } from 'xlsx';
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
 export interface IHelperFileService {
   createExcelWorkbook(
@@ -27,4 +28,6 @@ export interface IHelperFileService {
   createJson(path: string, data: Record<string, any>[]): boolean;
 
   readJson(path: string): Record<string, any>[];
+
+  storageMulter(destination: string): MulterOptions;
 }

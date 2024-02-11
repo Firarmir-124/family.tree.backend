@@ -1,18 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import bytes from 'bytes';
 import { ENUM_HELPER_FILE_TYPE } from '../constants/helper.enum.constant';
 import { IHelperFileService } from '../interfaces/helper.file-service.interface';
 import {
-  IHelperFileWriteExcelOptions,
+  IHelperFileCreateExcelWorkbookOptions,
   IHelperFileReadExcelOptions,
   IHelperFileRows,
-  IHelperFileCreateExcelWorkbookOptions,
+  IHelperFileWriteExcelOptions,
 } from '../interfaces/helper.interface';
-import { utils, write, read, WorkBook } from 'xlsx';
-import { writeFileSync, readFileSync } from 'fs';
+import { read, utils, WorkBook, write } from 'xlsx';
+import { readFileSync, writeFileSync } from 'fs';
+import { diskStorage } from 'multer';
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
 @Injectable()
 export class HelperFileService implements IHelperFileService {
+  storageMulter(destination: string): MulterOptions {
+    return {
+      storage: diskStorage({
+        destination,
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, file.fieldname + '-' + uniqueSuffix);
+        },
+      }),
+      fileFilter: (req, file, cb) => {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+          return cb(
+            new BadRequestException('Only image files are allowed!'),
+            false,
+          );
+        }
+
+        cb(null, true);
+      },
+      limits: {
+        fileSize: 10 * 1024 * 1024, // 10 MB
+      },
+    };
+  }
+
   createExcelWorkbook(
     rows: IHelperFileRows[],
     options?: IHelperFileCreateExcelWorkbookOptions,
