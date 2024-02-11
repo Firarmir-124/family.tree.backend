@@ -19,6 +19,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiDeleteInformation } from '../decorators/delete-information.decorator';
 import { ApiFindOneInformation } from '../decorators/find-one-information.decorator';
 import { IdParamDto } from '../../../global/dtos/id-param.dto';
+import {
+  Pagination,
+  PaginationDto,
+} from '../../../helpers/decorators/pagination.decorator';
+import { FindAllInformationResponseDto } from '../dto/find-all-information-response.dto';
+import { ApiFindAllInformations } from '../decorators/find-all-information-for.decorator';
 
 @Controller({
   version: '1',
@@ -29,6 +35,14 @@ import { IdParamDto } from '../../../global/dtos/id-param.dto';
 @ApiBearerAuth('access-token')
 export class InformationAdminController {
   constructor(private readonly informationService: InformationService) {}
+
+  @Get('')
+  @ApiFindAllInformations()
+  public findAll(
+    @Pagination() pagination: PaginationDto,
+  ): Promise<FindAllInformationResponseDto> {
+    return this.informationService.findAll(pagination);
+  }
 
   @Post()
   @ApiCreateInformation()
