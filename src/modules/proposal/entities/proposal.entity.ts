@@ -2,9 +2,9 @@
 // Path: src/modules/proposal/entities/proposal.entity.ts
 // Compare this snippet from src/modules/estate/entities/estate.entity.ts:
 import { Column, Entity, OneToMany } from 'typeorm';
-import { FilesEntity } from '../../common/entities/photo.entity';
 import { Base } from '../../common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { FilesEntity } from '../../common/entities/file.entity';
 
 @Entity({
   name: 'proposals',
@@ -30,8 +30,8 @@ export class ProposalEntity extends Base {
   @Column()
   geo: string;
 
-  @ApiProperty()
-  @OneToMany(() => FilesEntity, (photo) => photo.id)
+  @ApiProperty({ type: () => [FilesEntity] })
+  @OneToMany(() => FilesEntity, (file) => file.proposal)
   photos: FilesEntity[];
 
   @ApiProperty()

@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FilesEntity } from '../../common/entities/photo.entity';
 
 export class CreateProposalDto {
   @ApiProperty({
@@ -33,6 +32,12 @@ export class CreateProposalDto {
   @ApiProperty()
   geo: string;
 
-  @ApiProperty()
-  photos: FilesEntity[];
+  @ApiProperty({
+    type: 'array',
+    items: {
+      type: 'string',
+      format: 'binary',
+    },
+  })
+  photo: Express.Multer.File[];
 }

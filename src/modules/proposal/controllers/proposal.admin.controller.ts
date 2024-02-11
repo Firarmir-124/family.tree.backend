@@ -1,30 +1,34 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProposalService } from '../services/proposal.service';
 import { CreateProposalDto } from '../dto/create-proposal.dto';
 import {
   ApiBearerAuth,
+  ApiConsumes,
   ApiOperation,
   ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import {
   Pagination,
   PaginationDto,
 } from '../../../helpers/decorators/pagination.decorator';
 import { ProposalEntity } from '../entities/proposal.entity';
+import { FastifyFilesInterceptor } from '../../common/decorators/fastifys.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller({
   version: '1',
@@ -37,14 +41,19 @@ export class ProposalAdminController {
   constructor(private readonly proposalService: ProposalService) {}
 
   @Post()
+  @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Create proposal' })
   @ApiResponse({
     type: ProposalEntity,
     status: HttpStatus.CREATED,
     description: 'положительный ответ',
   })
-  create(@Body() createProposalDto: CreateProposalDto) {
-    return this.proposalService.create(createProposalDto);
+  @UseInterceptors(FastifyFilesInterceptor('photo', 10, './uploads'))
+  create(
+    @Body() createProposalDto: CreateProposalDto,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.proposalService.create(createProposalDto, files);
   }
 
   @Get()
@@ -70,7 +79,7 @@ export class ProposalAdminController {
     description: 'положительный ответ',
   })
   getTotal() {
-    return this.proposalService.getTotal({});
+    return this.proposalService.getTotal();
   }
 
   @Patch('activate/:id')
