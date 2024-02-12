@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { CreateCompanyDto } from '../dto/create-company.dto';
 import { UpdateCompanyDto } from '../dto/update-company.dto';
+import { PaginationDto } from '../../../helpers/decorators/pagination.decorator';
 
 export class CompanyRepository extends Repository<CompanyEntity> {
   constructor(
@@ -11,6 +12,20 @@ export class CompanyRepository extends Repository<CompanyEntity> {
     private readonly companyRepository: Repository<CompanyEntity>,
   ) {
     super(companyRepository.target, companyRepository.manager, undefined);
+  }
+
+  public findAllCompany(pagination: PaginationDto): Promise<CompanyEntity[]> {
+    try {
+      return this.find({
+        skip: (pagination.page - 1) * pagination.perPage,
+        take: pagination.perPage,
+      });
+    } catch (e) {
+      throw new HttpException(
+        'ошибка сервера',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   public async createCompany(

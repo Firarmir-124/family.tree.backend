@@ -18,6 +18,11 @@ import { ApiFindOneCompany } from '../decorators/findOne-company.decorator';
 import { ApiUpdateCompany } from '../decorators/update-company.decorator';
 import { ApiDeleteCompany } from '../decorators/delete-company.decorator';
 import { AuthGuard } from '@nestjs/passport';
+import {
+  Pagination,
+  PaginationDto,
+} from '../../../helpers/decorators/pagination.decorator';
+import { ApiFindAllCompany } from '../decorators/findAll-company.decorator';
 
 @Controller({
   version: '1',
@@ -28,6 +33,14 @@ import { AuthGuard } from '@nestjs/passport';
 @ApiBearerAuth('access-token')
 export class CompanyAdminController {
   constructor(private readonly companyService: CompanyService) {}
+
+  @Get('')
+  @ApiFindAllCompany()
+  public findAll(
+    @Pagination() pagination: PaginationDto,
+  ): Promise<CompanyEntity[]> {
+    return this.companyService.findAll(pagination);
+  }
 
   @ApiCreateCompany()
   @Post('')

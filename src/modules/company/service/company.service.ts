@@ -3,10 +3,15 @@ import { CompanyEntity } from '../entities/company.entity';
 import { CreateCompanyDto } from '../dto/create-company.dto';
 import { UpdateCompanyDto } from '../dto/update-company.dto';
 import { CompanyRepository } from '../repository/company.repository';
+import { PaginationDto } from '../../../helpers/decorators/pagination.decorator';
 
 @Injectable()
 export class CompanyService {
   constructor(private readonly companyRepository: CompanyRepository) {}
+
+  public findAll(pagination: PaginationDto): Promise<CompanyEntity[]> {
+    return this.companyRepository.findAllCompany(pagination);
+  }
 
   public async createCompany(
     createCompany: CreateCompanyDto,
