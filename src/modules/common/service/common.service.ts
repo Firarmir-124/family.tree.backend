@@ -45,6 +45,8 @@ export class CommonService {
   }
 
   async uploadFiles(files: Express.Multer.File[], id: number) {
+    console.log(files);
+
     const uploadsFile: {
       type: string;
       name: string;
@@ -53,22 +55,33 @@ export class CommonService {
     }[] = [];
 
     const folder = this.configService.get('IMAGE_FOLDER');
+    await fs.promises.mkdir(folder, { recursive: true });
 
-    const name =
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15);
+    const newPatchImages = path.join(
+      folder,
+      this.configService.get('IMAGE_FOLDER_IMAGE'),
+    );
+    const newPatchApplication = path.join(
+      folder,
+      this.configService.get('IMAGE_FOLDER_APPLICATION'),
+    );
 
-    const filename = path.join(folder, name[0] + name[1], name[2] + name[3]);
-
-    await fs.promises.mkdir(filename, { recursive: true });
+    await fs.promises.mkdir(newPatchImages, { recursive: true });
+    await fs.promises.mkdir(newPatchApplication, { recursive: true });
 
     for (const file of files) {
       const name =
         Math.random().toString(36).substring(2, 15) +
         Math.random().toString(36).substring(2, 15);
-
       const newFilename = name + path.extname(file.originalname);
-      const newFilePath = path.join(filename, newFilename);
+
+      let newFilePath = '';
+
+      if (file.mimetype.split('/')[0] === 'image') {
+        newFilePath = path.join(newPatchImages, newFilename);
+      } else {
+        newFilePath = path.join(newPatchApplication, newFilename);
+      }
 
       await fs.promises.rename(file.path, newFilePath);
 

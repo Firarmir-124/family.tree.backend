@@ -26,7 +26,7 @@ export class HelperFileService implements IHelperFileService {
         },
       }),
       fileFilter: (req, file, cb) => {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif|pdf)$/)) {
           return cb(
             new BadRequestException('Only image files are allowed!'),
             false,
