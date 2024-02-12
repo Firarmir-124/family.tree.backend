@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { MaterialGroupEntity } from './material-group.entity';
 
 @Entity({
   name: 'materials',
@@ -12,4 +13,7 @@ export class MaterialEntity {
 
   @Column()
   link: string;
+
+  @ManyToOne(() => MaterialGroupEntity, (group) => group.materials)
+  groupMaterial: MaterialGroupEntity;
 }

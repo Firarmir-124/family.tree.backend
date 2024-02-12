@@ -15,6 +15,8 @@ import { PageModule } from '../../modules/page/page.module';
 import { CommonModule } from '../../modules/common/common.module';
 import { CompanyModule } from '../../modules/company/company.module';
 import { CompanyAdminController } from '../../modules/company/controller/company.admin.controller';
+import { MaterialsModule } from '../../modules/materials/materials.module';
+import { MaterialAdminController } from '../../modules/materials/controllers/material.admin.controller';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { CompanyAdminController } from '../../modules/company/controller/company
     PageModule,
     CommonModule,
     CompanyModule,
+    MaterialsModule,
   ],
   controllers: [
     UserAdminController,
@@ -37,6 +40,7 @@ import { CompanyAdminController } from '../../modules/company/controller/company
     UsefulResourcesAdminController,
     PageAdminController,
     CompanyAdminController,
+    MaterialAdminController,
   ],
   providers: [],
 })

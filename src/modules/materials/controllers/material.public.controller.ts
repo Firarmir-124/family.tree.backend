@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MaterialService } from '../services/material.service';
 
@@ -9,8 +9,8 @@ import { MaterialService } from '../services/material.service';
 @ApiTags('public.material')
 export class MaterialPublicController {
   constructor(private readonly materialService: MaterialService) {}
-  @Get('')
-  async findAll() {
-    return this.materialService.getGroups();
-  }
+  // @Get('')
+  // async findAll() {
+  //   return this.materialService.getGroups();
+  // }
 }

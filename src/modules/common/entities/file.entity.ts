@@ -3,7 +3,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ProposalEntity } from '../../proposal/entities/proposal.entity';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { MaterialEntity } from '../../materials/entities/material.entity';
 
 @Entity({
   name: 'files',
@@ -31,11 +30,4 @@ export class FilesEntity {
     onDelete: 'CASCADE',
   })
   proposal: number;
-
-  @ApiHideProperty()
-  @ManyToOne(() => MaterialEntity, (material) => material.files, {
-    nullable: true,
-    onDelete: 'CASCADE',
-  })
-  material: number;
 }

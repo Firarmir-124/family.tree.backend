@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateMaterialDto {
-  @ApiProperty({})
+  @ApiProperty()
   name: string;
 
-  @ApiProperty({})
+  @ApiProperty()
   link: string;
 }
