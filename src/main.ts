@@ -24,8 +24,8 @@ async function bootstrap() {
   await app.register(multipart);
   // public assets
   app.useStaticAssets({
-    root: __dirname + '/../images',
-    prefix: '/images/',
+    root: __dirname + '/../files',
+    prefix: '/files/',
   });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const config = new DocumentBuilder()

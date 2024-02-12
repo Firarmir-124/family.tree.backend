@@ -10,6 +10,7 @@ import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FastifyFileInterceptor } from '../decorators/fastify.decorator';
 import { CommonService } from '../service/common.service';
 import { FastifyFilesInterceptor } from '../decorators/fastifys.decorator';
+import { UploadFileType } from '../types';
 
 @Controller('')
 @ApiTags('admin.common')
@@ -28,8 +29,11 @@ export class CommonAdminController {
 
   @Post('upload/files')
   @UseInterceptors(FastifyFilesInterceptor('file', 10, './uploads'))
-  async uploadFiles(@UploadedFiles() files: Express.Multer.File[], id: number) {
-    return this.commonService.uploadFiles(files, id);
+  async uploadFiles(
+    @UploadedFiles() files: Express.Multer.File[],
+    field: UploadFileType,
+  ) {
+    return this.commonService.uploadFiles(files, field);
   }
 
   @Post('delete/file')

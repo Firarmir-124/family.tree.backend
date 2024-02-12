@@ -6,6 +6,7 @@ import { ROOT } from '../../../main';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilesEntity } from '../entities/file.entity';
 import { In, Repository } from 'typeorm';
+import { UploadFileType } from '../types';
 
 @Injectable()
 export class CommonService {
@@ -16,6 +17,8 @@ export class CommonService {
   ) {}
 
   async uploadFile(file: Express.Multer.File) {
+    console.log(file);
+
     const folder = this.configService.get('IMAGE_FOLDER');
     // generate base64 with 28 symbols
     const name =
@@ -24,6 +27,9 @@ export class CommonService {
     const filename =
       path.join(folder, name[0] + name[1], name[2] + name[3], name) +
       path.extname(file.originalname);
+
+    console.log(file);
+
     console.log('file', file, filename);
     // fs.writeFileSync(filename, file.buffer);
     fs.readFile(file.path, (err, data) => {
@@ -44,14 +50,14 @@ export class CommonService {
     });
   }
 
-  async uploadFiles(files: Express.Multer.File[], id: number) {
+  async uploadFiles(files: Express.Multer.File[], filed: UploadFileType) {
     console.log(files);
 
     const uploadsFile: {
       type: string;
       name: string;
       path: string;
-      proposal: number;
+      [id: string]: number | string;
     }[] = [];
 
     const folder = this.configService.get('IMAGE_FOLDER');
@@ -83,14 +89,23 @@ export class CommonService {
         newFilePath = path.join(newPatchApplication, newFilename);
       }
 
-      await fs.promises.rename(file.path, newFilePath);
+      try {
+        console.log(file);
 
-      uploadsFile.push({
-        type: file.mimetype,
-        name: file.fieldname,
-        path: '/' + newFilePath.replaceAll('\\', '/'),
-        proposal: id,
-      });
+        const data = await fs.promises.readFile(file.path);
+        await fs.promises.mkdir(path.dirname(newFilePath), { recursive: true });
+        await fs.promises.writeFile(newFilePath, data);
+        console.log('File copied successfully');
+
+        uploadsFile.push({
+          type: file.mimetype,
+          name: file.fieldname,
+          path: '/' + newFilePath.replaceAll('\\', '/'),
+          [`${filed.field}`]: filed.id,
+        });
+      } catch (err) {
+        console.error('Error copying file:', err);
+      }
     }
 
     await this.fileRepository.save(uploadsFile);
