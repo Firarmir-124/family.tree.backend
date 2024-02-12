@@ -8,13 +8,5 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CompanyEntity extends Base {
   @ApiProperty()
   @Column()
-  title: string;
-
-  @ApiProperty()
-  @Column()
   description: string;
-
-  @ApiProperty()
-  @Column()
-  link: string;
 }
