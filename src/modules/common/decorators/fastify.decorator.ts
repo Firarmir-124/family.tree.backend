@@ -15,7 +15,7 @@ import { HelperFileService } from '../../../helpers/services/helper.file.service
 type MulterInstance = any;
 export function FastifyFileInterceptor(
   fieldName: string,
-  destination: string,
+  destination?: string,
 ): Type<NestInterceptor> {
   class MixinInterceptor implements NestInterceptor {
     protected multer: MulterInstance;
@@ -37,9 +37,6 @@ export function FastifyFileInterceptor(
       next: CallHandler,
     ): Promise<Observable<any>> {
       const ctx = context.switchToHttp();
-
-      console.log(ctx);
-
       await new Promise<void>((resolve, reject) =>
         this.multer.single(fieldName)(
           ctx.getRequest(),

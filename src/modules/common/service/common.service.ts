@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -6,7 +6,9 @@ import { ROOT } from '../../../main';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilesEntity } from '../entities/file.entity';
 import { In, Repository } from 'typeorm';
-import { UploadFileType } from '../types';
+import { v4 as uuidv4 } from 'uuid';
+import { CreateGeneralDataDto } from '../dto/create-general-data.dto';
+import { GeneralDatesEntity } from '../entities/generalData.entity';
 
 @Injectable()
 export class CommonService {
@@ -14,45 +16,11 @@ export class CommonService {
     private readonly configService: ConfigService,
     @InjectRepository(FilesEntity)
     private readonly fileRepository: Repository<FilesEntity>,
+    @InjectRepository(GeneralDatesEntity)
+    private readonly generalDateRepository: Repository<GeneralDatesEntity>,
   ) {}
 
-  async uploadFile(file: Express.Multer.File) {
-    console.log(file);
-
-    const folder = this.configService.get('IMAGE_FOLDER');
-    // generate base64 with 28 symbols
-    const name =
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15);
-    const filename =
-      path.join(folder, name[0] + name[1], name[2] + name[3], name) +
-      path.extname(file.originalname);
-
-    console.log(file);
-
-    console.log('file', file, filename);
-    // fs.writeFileSync(filename, file.buffer);
-    fs.readFile(file.path, (err, data) => {
-      if (err) throw err;
-      fs.mkdirSync(path.dirname(filename), { recursive: true });
-      fs.writeFile(filename, data, (err) => {
-        if (err) throw err;
-        console.log('File copied successfully');
-      });
-    });
-
-    const newFileName = '/' + filename.replaceAll('\\', '/');
-
-    return await this.fileRepository.save({
-      type: file.mimetype,
-      name: file.fieldname,
-      path: newFileName,
-    });
-  }
-
-  async uploadFiles(files: Express.Multer.File[], filed: UploadFileType) {
-    console.log(files);
-
+  async uploadFiles(files: Express.Multer.File[]) {
     const uploadsFile: {
       type: string;
       name: string;
@@ -63,77 +31,145 @@ export class CommonService {
     const folder = this.configService.get('IMAGE_FOLDER');
     await fs.promises.mkdir(folder, { recursive: true });
 
-    const newPatchImages = path.join(
-      folder,
-      this.configService.get('IMAGE_FOLDER_IMAGE'),
-    );
-    const newPatchApplication = path.join(
-      folder,
-      this.configService.get('IMAGE_FOLDER_APPLICATION'),
-    );
-
-    await fs.promises.mkdir(newPatchImages, { recursive: true });
-    await fs.promises.mkdir(newPatchApplication, { recursive: true });
-
     for (const file of files) {
-      const name =
-        Math.random().toString(36).substring(2, 15) +
-        Math.random().toString(36).substring(2, 15);
+      const name = uuidv4();
       const newFilename = name + path.extname(file.originalname);
 
-      let newFilePath = '';
+      const newFilePath = path.join(`${folder}/${name}`, newFilename);
 
-      if (file.mimetype.split('/')[0] === 'image') {
-        newFilePath = path.join(newPatchImages, newFilename);
-      } else {
-        newFilePath = path.join(newPatchApplication, newFilename);
-      }
+      const data = await fs.promises.readFile(file.path);
+      await fs.promises.mkdir(path.dirname(newFilePath), { recursive: true });
+      await fs.promises.writeFile(newFilePath, data);
+      console.log('File copied successfully');
 
-      try {
-        console.log(file);
-
-        const data = await fs.promises.readFile(file.path);
-        await fs.promises.mkdir(path.dirname(newFilePath), { recursive: true });
-        await fs.promises.writeFile(newFilePath, data);
-        console.log('File copied successfully');
-
-        uploadsFile.push({
-          type: file.mimetype,
-          name: file.fieldname,
-          path: '/' + newFilePath.replaceAll('\\', '/'),
-          [`${filed.field}`]: filed.id,
-        });
-      } catch (err) {
-        console.error('Error copying file:', err);
-      }
+      uploadsFile.push({
+        type: file.mimetype,
+        name: file.fieldname,
+        path: '/' + newFilePath.replaceAll('\\', '/'),
+      });
     }
 
-    await this.fileRepository.save(uploadsFile);
+    return this.fileRepository.save(uploadsFile);
   }
 
   async removeFile(filename: string[]) {
-    let state = true;
+    if (filename.length === 0) {
+      throw new NotFoundException();
+    }
 
     filename.forEach((item) => {
       const file = path.join(ROOT, '..', item);
 
-      if (file.includes(path.join(ROOT, '..', 'images'))) {
-        if (!fs.existsSync(file)) {
-          state = true;
-        }
+      if (
+        file.includes(path.join(ROOT, '..', 'files')) &&
+        fs.existsSync(file)
+      ) {
         try {
           fs.unlinkSync(file);
-          state = true;
+          fs.rmdirSync(path.dirname(file));
         } catch (e) {
           console.log('e', e);
         }
-        state = false;
       }
-      state = false;
     });
 
-    await this.fileRepository.delete({ path: In(filename) });
+    return this.fileRepository.delete({ path: In(filename) });
+  }
 
-    return state;
+  async updateFile(filename: string | null, file: Express.Multer.File | null) {
+    if (!file || !filename) {
+      throw new NotFoundException(`filename and file not found`);
+    }
+
+    const filePatch = path.join(ROOT, '..', filename);
+
+    if (!filePatch.includes(path.join(ROOT, '..', 'files'))) {
+      throw new NotFoundException(`Folder not found`);
+    }
+
+    if (!fs.existsSync(filePatch)) {
+      throw new NotFoundException(`File 1 ${file} not found`);
+    }
+
+    const folder = this.configService.get('IMAGE_FOLDER');
+    const name = uuidv4();
+    const newFilename = name + path.extname(file.originalname);
+
+    const newFilePath = path.join(`${folder}/${name}`, newFilename);
+
+    const data = await fs.promises.readFile(file.path);
+    await fs.promises.mkdir(path.dirname(newFilePath), { recursive: true });
+    await fs.promises.writeFile(newFilePath, data);
+    await this.fileRepository.update(
+      { path: filename },
+      {
+        type: file.mimetype,
+        name: file.fieldname,
+        path: '/' + newFilePath.replaceAll('\\', '/'),
+      },
+    );
+    fs.unlinkSync(filePatch);
+    fs.rmdirSync(path.dirname(filePatch));
+    return true;
+  }
+
+  async getGeneralData(file: string | null) {
+    const where = {};
+
+    if (file) {
+      where['file'] = {
+        id: parseInt(file),
+      };
+    }
+
+    console.log('where', where);
+
+    return await this.generalDateRepository.find({
+      where,
+      relations: ['file'],
+    });
+  }
+
+  async createGeneralData(generalData: CreateGeneralDataDto) {
+    const fileOne = await this.fileRepository.findOne({
+      where: { id: generalData.fileId },
+    });
+
+    if (!fileOne) {
+      throw new NotFoundException();
+    }
+
+    return this.generalDateRepository.save({ ...generalData, file: fileOne });
+  }
+
+  async deleteGeneralData(id: number) {
+    const fileOne = await this.generalDateRepository.findOne({
+      where: { id },
+    });
+
+    if (!fileOne) {
+      throw new NotFoundException();
+    }
+
+    return this.generalDateRepository.delete(id);
+  }
+
+  async updateGeneralData(id: number, generalData: CreateGeneralDataDto) {
+    const generalDataOne = await this.generalDateRepository.findOne({
+      where: { id },
+    });
+
+    const fileOne = await this.fileRepository.findOne({
+      where: { id: generalData.fileId },
+    });
+
+    if (!generalDataOne) {
+      throw new NotFoundException();
+    }
+
+    return this.generalDateRepository.update(id, {
+      ...generalData,
+      file: fileOne,
+    });
   }
 }

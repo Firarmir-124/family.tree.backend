@@ -1,13 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthModule } from './modules/auth/auth.module';
 import { RouterModule } from './router/router.module';
-import { HelperModule } from './helpers/helper.module';
-import { UserModule } from './modules/user/user.module';
-import { ProposalModule } from './modules/proposal/proposal.module';
-import { DictionaryModule } from './modules/dictionary/dictionary.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { HelperModule } from './helpers/helper.module';
 
 @Module({
   imports: [
@@ -40,10 +36,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       inject: [ConfigService],
     }),
     HelperModule,
-    DictionaryModule,
-    UserModule,
-    ProposalModule,
-    AuthModule,
     RouterModule.forRoot(),
   ],
   controllers: [],
