@@ -1,16 +1,16 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres:13
-    ports:
-      - "5432:5432"
+  mongo:
+    image: mongo:latest
+    container_name: mongo_container2
+    restart: always
     environment:
-      - POSTGRES_DB=fileServer
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      MONGO_INITDB_DATABASE: family_tree
+    ports:
+      - '27017:27017'
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - mongo_data:/data/db
 
 volumes:
-  pgdata:
+  mongo_data:

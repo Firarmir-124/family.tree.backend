@@ -1,25 +1,26 @@
-// photo entity
-
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-@Entity({
-  name: 'files',
-})
-export class FilesEntity {
+@Schema()
+export class Files {
   @ApiProperty()
-  @PrimaryGeneratedColumn()
+  @Prop({ required: true, unique: true, index: true })
   id: number;
 
   @ApiProperty()
-  @Column()
+  @Prop({ required: true, unique: false, type: String })
   type: string;
 
   @ApiProperty()
-  @Column()
+  @Prop({ required: true, unique: false, type: String })
   name: string;
 
   @ApiProperty()
-  @Column()
+  @Prop({ required: true, unique: false, type: String })
   path: string;
 }
+
+export const FileEntity = {
+  name: 'file_entity',
+  schema: SchemaFactory.createForClass(Files),
+};

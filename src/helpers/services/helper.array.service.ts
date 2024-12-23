@@ -124,4 +124,29 @@ export class HelperArrayService implements IHelperArrayService {
   chunk<T>(a: T[], size: number): T[][] {
     return _.chunk<T>(a, size);
   }
+
+  convertToArrayForLanguageSystem<T>(objLang: T): Array<T[keyof T]> {
+    const materials: Array<T[keyof T]> = [];
+
+    const checkObj = (obj: T[Extract<keyof T, string>]) =>
+      Object.keys(obj).length !== 0;
+
+    for (const materialKey in objLang) {
+      const mat = objLang[materialKey];
+
+      if (Array.isArray(mat)) {
+        mat.forEach((item) => {
+          if (checkObj(item)) {
+            materials.push({ ...item, lang: materialKey });
+          }
+        });
+      } else {
+        if (checkObj(mat)) {
+          materials.push({ ...mat, lang: materialKey });
+        }
+      }
+    }
+
+    return materials;
+  }
 }

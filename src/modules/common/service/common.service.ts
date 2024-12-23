@@ -3,21 +3,25 @@ import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as fs from 'fs';
 import { ROOT } from '../../../main';
-import { InjectRepository } from '@nestjs/typeorm';
-import { FilesEntity } from '../entities/file.entity';
-import { In, Repository } from 'typeorm';
+import { In } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateGeneralDataDto } from '../dto/create-general-data.dto';
-import { GeneralDatesEntity } from '../entities/generalData.entity';
+import {
+  GeneralDates,
+  GeneralDatesEntity,
+} from '../entities/generalData.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { DeleteResult, Model } from 'mongoose';
+import { FileEntity, Files } from '../entities/file.entity';
 
 @Injectable()
 export class CommonService {
   constructor(
     private readonly configService: ConfigService,
-    @InjectRepository(FilesEntity)
-    private readonly fileRepository: Repository<FilesEntity>,
-    @InjectRepository(GeneralDatesEntity)
-    private readonly generalDateRepository: Repository<GeneralDatesEntity>,
+    @InjectModel(FileEntity.name)
+    private readonly fileRepository: Model<Files>,
+    @InjectModel(GeneralDatesEntity.name)
+    private readonly generalDateRepository: Model<GeneralDates>,
   ) {}
 
   async uploadFiles(files: Express.Multer.File[]) {
@@ -49,10 +53,10 @@ export class CommonService {
       });
     }
 
-    return this.fileRepository.save(uploadsFile);
+    return this.fileRepository.create(uploadsFile);
   }
 
-  async removeFile(filename: string[]) {
+  async removeFile(filename: string[]): Promise<DeleteResult> {
     if (filename.length === 0) {
       throw new NotFoundException();
     }
@@ -73,7 +77,7 @@ export class CommonService {
       }
     });
 
-    return this.fileRepository.delete({ path: In(filename) });
+    return this.fileRepository.deleteMany({ path: In(filename) });
   }
 
   async updateFile(filename: string | null, file: Express.Multer.File | null) {
@@ -100,7 +104,7 @@ export class CommonService {
     const data = await fs.promises.readFile(file.path);
     await fs.promises.mkdir(path.dirname(newFilePath), { recursive: true });
     await fs.promises.writeFile(newFilePath, data);
-    await this.fileRepository.update(
+    await this.fileRepository.updateOne(
       { path: filename },
       {
         type: file.mimetype,
@@ -139,10 +143,10 @@ export class CommonService {
       throw new NotFoundException();
     }
 
-    return this.generalDateRepository.save({ ...generalData, file: fileOne });
+    return this.generalDateRepository.create({ ...generalData, file: fileOne });
   }
 
-  async deleteGeneralData(id: number) {
+  async deleteGeneralData(id: string): Promise<DeleteResult> {
     const fileOne = await this.generalDateRepository.findOne({
       where: { id },
     });
@@ -151,10 +155,10 @@ export class CommonService {
       throw new NotFoundException();
     }
 
-    return this.generalDateRepository.delete(id);
+    return this.generalDateRepository.deleteOne({ id });
   }
 
-  async updateGeneralData(id: number, generalData: CreateGeneralDataDto) {
+  async updateGeneralData(id: string, generalData: CreateGeneralDataDto) {
     const generalDataOne = await this.generalDateRepository.findOne({
       where: { id },
     });
@@ -167,9 +171,12 @@ export class CommonService {
       throw new NotFoundException();
     }
 
-    return this.generalDateRepository.update(id, {
-      ...generalData,
-      file: fileOne,
-    });
+    return this.generalDateRepository.updateOne(
+      { id },
+      {
+        ...generalData,
+        file: fileOne,
+      },
+    );
   }
 }

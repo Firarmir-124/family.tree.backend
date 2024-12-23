@@ -57,4 +57,8 @@ export interface IHelperArrayService {
   includes<T>(a: T[], b: T): boolean;
 
   chunk<T>(a: T[], size: number): T[][];
+
+  convertToArrayForLanguageSystem<T extends Record<string, any>>(
+    objLang: T,
+  ): Array<T>;
 }

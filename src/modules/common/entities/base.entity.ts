@@ -1,23 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  CreateDateColumn,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { UpdateDateColumn } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export abstract class Base {
+@Schema()
+export class Base {
   @ApiProperty({ description: 'id', required: true })
-  @PrimaryGeneratedColumn()
+  @Prop({ required: true, unique: true, index: true })
   id: number;
 
   @ApiProperty({ description: 'createdAt', required: true })
-  @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
+  @Prop({ required: true, default: () => new Date() })
   created: Date;
 
-  @ApiProperty({ description: 'updatedAt', required: true })
+  @Prop({ required: true, default: () => new Date() })
   @UpdateDateColumn({
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updated: Date;
 }
+
+export const BaseEntity = {
+  name: 'base_entity',
+  schema: SchemaFactory.createForClass(Base),
+};

@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RouterModule } from './router/router.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { HelperModule } from './helpers/helper.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,19 +13,11 @@ import { HelperModule } from './helpers/helper.module';
       cache: true,
       envFilePath: ['.env'],
     }),
-    // typeorm connection to postgresql
-    TypeOrmModule.forRootAsync({
+    MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST') || 'localhost',
-        port: configService.get<number>('DB_PORT') || 5432,
-        username: configService.get<string>('DB_USERNAME') || 'postgres',
-        password: configService.get<string>('DB_PASSWORD') || 'postgres',
-        database: configService.get<string>('DB_DATABASE') || 'postgres',
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get<boolean>('DB_SYNCHRONIZE') || true,
-        logging: configService.get<boolean>('DB_LOGGING') || false,
+        uri: configService.get<string>('MONGODB_URI'),
+        dbName: configService.get<string>('MONGODB_DB'),
       }),
       inject: [ConfigService],
     }),
@@ -37,6 +30,7 @@ import { HelperModule } from './helpers/helper.module';
     }),
     HelperModule,
     RouterModule.forRoot(),
+    AuthModule,
   ],
   controllers: [],
   providers: [],

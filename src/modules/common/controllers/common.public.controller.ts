@@ -16,6 +16,7 @@ import { CommonService } from '../service/common.service';
 import { FastifyFilesInterceptor } from '../decorators/fastifys.decorator';
 import { FastifyFileInterceptor } from '../decorators/fastify.decorator';
 import { CreateGeneralDataDto } from '../dto/create-general-data.dto';
+import { DeleteResult } from 'mongoose';
 
 @Controller('')
 @ApiTags('public.common')
@@ -28,7 +29,9 @@ export class CommonPublicController {
   }
 
   @Post('delete/file')
-  async removeFile(@Body('filename') filename: string[]) {
+  async removeFile(
+    @Body('filename') filename: string[],
+  ): Promise<DeleteResult> {
     return this.commonService.removeFile(filename);
   }
 
@@ -54,13 +57,13 @@ export class CommonPublicController {
   }
 
   @Delete('general-data/delete/:id')
-  async deleteGeneralData(@Param('id') id: number) {
+  async deleteGeneralData(@Param('id') id: string): Promise<DeleteResult> {
     return this.commonService.deleteGeneralData(id);
   }
 
   @Put('general-data/update/:id')
   async updateGeneralData(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body('generalData') generalData: CreateGeneralDataDto,
   ) {
     return this.commonService.updateGeneralData(id, generalData);

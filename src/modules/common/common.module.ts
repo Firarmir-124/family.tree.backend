@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { FilesEntity } from './entities/file.entity';
 import { CommonService } from './service/common.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { BaseEntity } from './entities/base.entity';
+import { FileEntity } from './entities/file.entity';
 import { GeneralDatesEntity } from './entities/generalData.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([FilesEntity, GeneralDatesEntity])],
+  imports: [
+    MongooseModule.forFeature([BaseEntity, FileEntity, GeneralDatesEntity]),
+  ],
   providers: [CommonService],
   exports: [CommonService],
 })

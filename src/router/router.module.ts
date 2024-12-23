@@ -1,6 +1,7 @@
 import { DynamicModule, ForwardReference, Module, Type } from '@nestjs/common';
 import { RoutePublicModule } from './routes/route.public.module';
 import { RouterModule as NestJsRouterModule } from '@nestjs/core';
+import { RouteAuthModule } from './routes/route.auth.module';
 
 @Module({})
 export class RouterModule {
@@ -13,10 +14,15 @@ export class RouterModule {
     )[] = [];
     imports.push(
       RoutePublicModule,
+      RouteAuthModule,
       NestJsRouterModule.register([
         {
           path: '/api/v1/',
           module: RoutePublicModule,
+        },
+        {
+          path: '/api/v1/auth',
+          module: RouteAuthModule,
         },
       ]),
     );

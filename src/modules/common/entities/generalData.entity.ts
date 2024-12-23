@@ -1,32 +1,27 @@
-// photo entity
-
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { FilesEntity } from './file.entity';
+import { Files } from './file.entity';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 
-@Entity({
-  name: 'generaldatas',
-})
-export class GeneralDatesEntity {
+@Schema()
+export class GeneralDates {
   @ApiProperty()
-  @PrimaryGeneratedColumn()
+  @Prop({ required: true, unique: true, index: true })
   id: number;
 
   @ApiProperty()
-  @Column()
+  @Prop({ required: true, unique: false, type: String })
   title: string;
 
   @ApiProperty()
-  @Column()
+  @Prop({ required: true, unique: false, type: String })
   description: string;
 
-  @OneToOne(() => FilesEntity, { onDelete: 'CASCADE' })
-  @JoinColumn()
-  file: FilesEntity;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Files.name })
+  file: Files;
 }
+
+export const GeneralDatesEntity = {
+  name: 'general_dates_entity',
+  schema: SchemaFactory.createForClass(GeneralDates),
+};
