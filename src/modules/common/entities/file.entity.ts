@@ -4,10 +4,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 @Schema()
 export class Files {
   @ApiProperty()
-  @Prop({ required: true, unique: true, index: true })
-  id: number;
-
-  @ApiProperty()
   @Prop({ required: true, unique: false, type: String })
   type: string;
 

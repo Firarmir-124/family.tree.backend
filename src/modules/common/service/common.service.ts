@@ -33,27 +33,36 @@ export class CommonService {
     }[] = [];
 
     const folder = this.configService.get('IMAGE_FOLDER');
-    await fs.promises.mkdir(folder, { recursive: true });
+    try {
+      // Создаем директорию, если ее нет
+      await fs.promises.mkdir(folder, { recursive: true });
 
-    for (const file of files) {
-      const name = uuidv4();
-      const newFilename = name + path.extname(file.originalname);
+      for (const file of files) {
+        const name = uuidv4();
+        const newFilename = name + path.extname(file.originalname);
 
-      const newFilePath = path.join(`${folder}/${name}`, newFilename);
+        const newFilePath = path.join(folder, name, newFilename);
 
-      const data = await fs.promises.readFile(file.path);
-      await fs.promises.mkdir(path.dirname(newFilePath), { recursive: true });
-      await fs.promises.writeFile(newFilePath, data);
-      console.log('File copied successfully');
+        // Чтение файла и запись в новое место
+        const data = await fs.promises.readFile(file.path);
+        await fs.promises.mkdir(path.dirname(newFilePath), { recursive: true });
+        await fs.promises.writeFile(newFilePath, data);
+        console.log('File copied successfully');
 
-      uploadsFile.push({
-        type: file.mimetype,
-        name: file.fieldname,
-        path: '/' + newFilePath.replaceAll('\\', '/'),
-      });
+        // Добавление информации о файле в массив для базы данных
+        uploadsFile.push({
+          type: file.mimetype,
+          name: file.fieldname,
+          path: '/' + newFilePath.replaceAll('\\', '/'), // Путь с прямыми слэшами
+        });
+      }
+
+      // Сохраняем информацию о файлах в базе данных
+      return await this.fileRepository.create(uploadsFile);
+    } catch (error) {
+      console.error('Error while uploading files:', error);
+      throw new Error('File upload failed');
     }
-
-    return this.fileRepository.create(uploadsFile);
   }
 
   async removeFile(filename: string[]): Promise<DeleteResult> {

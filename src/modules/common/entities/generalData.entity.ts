@@ -6,10 +6,6 @@ import mongoose from 'mongoose';
 @Schema()
 export class GeneralDates {
   @ApiProperty()
-  @Prop({ required: true, unique: true, index: true })
-  id: number;
-
-  @ApiProperty()
   @Prop({ required: true, unique: false, type: String })
   title: string;
 

@@ -4,10 +4,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema()
 export class Base {
-  @ApiProperty({ description: 'id', required: true })
-  @Prop({ required: true, unique: true, index: true })
-  id: number;
-
   @ApiProperty({ description: 'createdAt', required: true })
   @Prop({ required: true, default: () => new Date() })
   created: Date;

@@ -44,7 +44,6 @@ export class AuthService {
   }
 
   public generateToken(user: any): string {
-    console.log('payload', user);
     const payload = JSON.parse(JSON.stringify(user));
     return jwt.sign(payload, this.configService.get('JWT_SECRET'), {
       expiresIn: this.configService.get('JWT_EXPIRES_IN'),
