@@ -78,7 +78,13 @@ export class FamilyTreeRepository {
 
   public async removeFamily(_id: string): Promise<string> {
     try {
+      const descendants = await this.familyTreeRepository.find({ parent: _id });
+
       await this.familyTreeRepository.deleteOne({ _id });
+
+      for (const descendant of descendants) {
+        await this.removeFamily(descendant._id.toString());
+      }
       return _id;
     } catch (e) {
       throw new HttpException(

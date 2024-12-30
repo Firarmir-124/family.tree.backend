@@ -30,14 +30,15 @@ export class FamilyTreeAuthController {
 
   @Post('spouse')
   public createSpouse(
-    @Body('spouse') createSpouseDto: CreateSpouseDto,
+    @Body() createSpouseDto: CreateSpouseDto,
     @Query('id') id: string,
   ): Promise<FamilyTree> {
     return this.familyTreeService.createSpouse(createSpouseDto, id);
   }
 
-  @Post('')
+  @Post()
   public create(@Body() createFamilyDto: CreateFamilyDto): Promise<FamilyTree> {
+    console.log('createFamilyDto', createFamilyDto);
     return this.familyTreeService.create(createFamilyDto);
   }
 
