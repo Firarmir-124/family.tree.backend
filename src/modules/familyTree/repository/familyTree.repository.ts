@@ -5,7 +5,7 @@ import { CreateFamilyDto } from '../dto/create-family.dto';
 import { UpdateFamilyDto } from '../dto/update-family.dto';
 import { FamilyTree, FamilyTreeEntity } from '../entities/familyTree.entity';
 import { CreateSpouseDto } from '../dto/create-spouse.dto';
-import { FamilyTreeType } from '../types/types';
+import { FamilyTreeType, QueryFamilyType } from '../types/types';
 
 export class FamilyTreeRepository {
   constructor(
@@ -39,9 +39,11 @@ export class FamilyTreeRepository {
     }
   }
 
-  public async findAllFamilyTree(): Promise<FamilyTreeType[]> {
+  public async findAllFamilyTree(
+    query: QueryFamilyType,
+  ): Promise<FamilyTreeType[]> {
     try {
-      return this.familyTreeRepository.find();
+      return this.familyTreeRepository.find(query);
     } catch (e) {
       throw new HttpException(
         'ошибка сервера',

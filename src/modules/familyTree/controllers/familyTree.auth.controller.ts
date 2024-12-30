@@ -16,7 +16,7 @@ import { FamilyTree } from '../entities/familyTree.entity';
 import { UpdateFamilyDto } from '../dto/update-family.dto';
 import { FamilyTreeService } from '../services/familyTree.service';
 import { CreateSpouseDto } from '../dto/create-spouse.dto';
-import { FamilyTreeMutationType } from '../types/types';
+import { FamilyTreeMutationType, QueryFamilyType } from '../types/types';
 
 @Controller({
   version: '1',
@@ -43,8 +43,16 @@ export class FamilyTreeAuthController {
   }
 
   @Get()
-  public findAllFamilyTree(): Promise<FamilyTreeMutationType[]> {
-    return this.familyTreeService.findAllFamilyTree();
+  public findAllFamilyTree(
+    @Query('name') name: string,
+  ): Promise<FamilyTreeMutationType[]> {
+    const query = {} as QueryFamilyType;
+
+    if (name) {
+      query['name'] = { $regex: `^${name}`, $options: 'i' };
+    }
+
+    return this.familyTreeService.findAllFamilyTree(query);
   }
 
   @Get(':id')

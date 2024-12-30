@@ -5,11 +5,11 @@ import { CreateFamilyDto } from '../dto/create-family.dto';
 import { FamilyTree } from '../entities/familyTree.entity';
 import { UpdateFamilyDto } from '../dto/update-family.dto';
 import { CreateSpouseDto } from '../dto/create-spouse.dto';
-import { FamilyTreeMutationType, FamilyTreeType } from '../types/types';
-
-interface Interface extends FamilyTree {
-  children: Interface[];
-}
+import {
+  FamilyTreeMutationType,
+  FamilyTreeType,
+  QueryFamilyType,
+} from '../types/types';
 
 @Injectable()
 export class FamilyTreeService {
@@ -36,8 +36,11 @@ export class FamilyTreeService {
     return this.familyTreeRepository.createFamily(info);
   }
 
-  public async findAllFamilyTree(): Promise<FamilyTreeMutationType[]> {
-    const familyTreeList = await this.familyTreeRepository.findAllFamilyTree();
+  public async findAllFamilyTree(
+    query: QueryFamilyType,
+  ): Promise<FamilyTreeMutationType[]> {
+    const familyTreeList =
+      await this.familyTreeRepository.findAllFamilyTree(query);
 
     const buildTree = (
       data: FamilyTreeType[],
@@ -68,7 +71,27 @@ export class FamilyTreeService {
         });
     };
 
-    return buildTree(familyTreeList);
+    return !query.name
+      ? buildTree(familyTreeList)
+      : familyTreeList.map((item) => {
+          const newItem = {
+            _id: item._id,
+            name: item.name,
+            photo: item.photo,
+            dob: item.dob,
+            dod: item.dod,
+            description: item.description,
+            genus: item.genus,
+            type: item.type,
+            spouse: item.spouse,
+            created: item.created,
+            updated: item.updated,
+          };
+          return {
+            ...newItem,
+            children: [],
+          };
+        });
   }
 
   public async findOne(id: string): Promise<FamilyTree> {

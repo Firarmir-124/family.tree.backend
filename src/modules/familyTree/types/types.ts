@@ -7,3 +7,7 @@ export interface FamilyTreeType extends FamilyTree {
 export interface FamilyTreeMutationType extends FamilyTreeType {
   children: FamilyTreeMutationType[];
 }
+
+export interface QueryFamilyType {
+  name: { $regex: string; $options: string };
+}
