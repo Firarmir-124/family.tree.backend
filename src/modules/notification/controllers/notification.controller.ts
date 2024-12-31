@@ -1,20 +1,17 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NotificationService } from '../services/notification.service';
-import { SendNotificationGroupDto } from '../dtos/send-notification-group.dto';
 import {
   Pagination,
   PaginationDto,
 } from '../../../helpers/decorators/pagination.decorator';
-import { ApiGetAllNotification } from '../decorators/get-all-notifications.decorator';
-import { SendNotificationForAllUsersDto } from '../dtos/send-notification-all.dto';
-import { ApiSendNotificationToAllUsers } from '../decorators/send-notifications-all.decorator';
-import { ApiSendNotificationToUsersGroup } from '../decorators/send-notification-one.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from '../../../global/guards/role.guard';
-import { Roles } from '../../../global/decorators/role.decorator';
+import { Request } from 'express';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { Notification } from '../entity/notification.entity';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
-@UseGuards(RolesGuard)
 @UseGuards(AuthGuard('jwt'))
 @Controller({
   path: 'notification',
@@ -23,33 +20,33 @@ import { Roles } from '../../../global/decorators/role.decorator';
 @ApiTags('notifications')
 @ApiBearerAuth('access-token')
 export class NotificationController {
-  constructor(private readonly service: NotificationService) {}
+  constructor(
+    private readonly service: NotificationService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  @ApiGetAllNotification()
-  @Get('history')
-  async getAllNotifications(@Pagination() pagination: PaginationDto) {
-    return await this.service.getAllNotifications(pagination);
+  @Get()
+  async getAllNotifications(
+    @Pagination() pagination: PaginationDto,
+    @Req() req: Request,
+  ): Promise<Notification[]> {
+    const token = req.headers['authorization'].split(' ')[1];
+    const { _id } = await this.jwtService.verifyAsync(token, {
+      ignoreExpiration: true,
+      secret: this.configService.get('JWT_SECRET'),
+    });
+    return await this.service.getAllNotifications(pagination, _id);
   }
 
-  @Roles('admin' && 'super')
-  @Post('save')
-  async save() {
-    return this.service.save();
+  @Delete(':id')
+  async removeNotification(@Param('id') id: string): Promise<string> {
+    console.log('123');
+    return await this.service.removeNotification(id);
   }
 
-  @Roles('admin' && 'super')
-  @ApiSendNotificationToAllUsers()
-  @Post('send')
-  async sendNotificationsToAllUsers(
-    @Body() req: SendNotificationForAllUsersDto,
-  ) {
-    return this.service.sendNotificationsToAllUsers(req);
-  }
-
-  @Roles('admin' && 'super')
-  @ApiSendNotificationToUsersGroup()
-  @Post('group')
-  async sendNotificationsToOneUser(@Body() req: SendNotificationGroupDto) {
-    return this.service.sendNotificationToUserGroup(req);
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  public happyBirthday() {
+    return this.service.happyBirthday();
   }
 }

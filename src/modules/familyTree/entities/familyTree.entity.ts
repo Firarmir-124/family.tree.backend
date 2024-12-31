@@ -4,6 +4,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { GenusEnum } from '../enums/genus.enum';
 import { Types } from 'mongoose';
 import { TypeEnum } from '../enums/type.enum';
+import { User } from '../../user/entities/user.entity';
 
 @Schema()
 export class FamilyTree extends Base {
@@ -51,6 +52,10 @@ export class FamilyTree extends Base {
   @ApiProperty()
   @Prop({ type: Types.ObjectId, ref: FamilyTree.name, required: false })
   parent: Types.ObjectId;
+
+  @ApiProperty()
+  @Prop({ type: Types.ObjectId, ref: User.name, required: false })
+  userCreated: User;
 }
 
 export const FamilyTreeEntity = {

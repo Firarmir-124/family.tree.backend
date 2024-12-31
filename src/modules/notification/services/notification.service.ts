@@ -1,69 +1,62 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { NotificationRepository } from '../repositories/notification.repository';
 import { Expo, ExpoPushMessage } from 'expo-server-sdk';
-import { Error } from 'mongoose';
-import { SendNotificationGroupDto } from '../dtos/send-notification-group.dto';
 import { PaginationDto } from '../../../helpers/decorators/pagination.decorator';
-import { SendNotificationForAllUsersDto } from '../dtos/send-notification-all.dto';
+import { FamilyTreeRepository } from '../../familyTree/repository/familyTree.repository';
+import { Notification } from '../entity/notification.entity';
 
 @Injectable()
 export class NotificationService {
-  constructor(private readonly repository: NotificationRepository) {}
+  constructor(
+    private readonly repository: NotificationRepository,
+    private readonly familyTreeRepository: FamilyTreeRepository,
+  ) {}
 
   private expo = new Expo({
-    accessToken: 'o8YGdGZZ2NCV0REW9jFM7LThnncVcvEesmKeAMrH',
+    accessToken: 'dxToV0xL25ArBuB-SmKWHhjUQRNmBXIDZhAqxBrj',
   });
 
-  async getAllNotifications(pagination: PaginationDto) {
-    return this.repository.getNotificationHistory(pagination);
+  async getAllNotifications(
+    pagination: PaginationDto,
+    id: string,
+  ): Promise<Notification[]> {
+    return this.repository.getNotificationHistory(pagination, id);
   }
 
-  async save() {
-    return this.repository.save();
+  async removeNotification(id: string): Promise<string> {
+    return this.repository.remove(id);
   }
 
-  async sendNotificationsToAllUsers(req: SendNotificationForAllUsersDto) {
-    const allUserDevices = await this.repository.findAll();
+  public async happyBirthday() {
+    const familyList = await this.familyTreeRepository.findAllFamilyTree({});
 
-    await this.repository.saveHistoryToAllUsers(req.title, req.message);
+    for (const family of familyList) {
+      const currentMonth = new Date().getMonth() + 1;
+      const currentDay = new Date().getDate();
 
-    const notification: ExpoPushMessage[] = allUserDevices.map((item) => ({
-      to: item.token,
-      title: req.title,
-      body: req.message,
-    }));
+      const dateOfBirthMonth = new Date(family.dob).getMonth() + 1;
+      const dateOfBirthDay = new Date(family.dob).getDate();
 
-    try {
-      const ticket = await this.expo.sendPushNotificationsAsync(notification);
-      console.log(ticket);
-      return ticket;
-    } catch (e) {
-      console.log('Error sending push notifications:', e);
-      throw Error;
-    }
-  }
+      if (currentMonth === dateOfBirthMonth && currentDay === dateOfBirthDay) {
+        console.log('user', family.userCreated);
 
-  async sendNotificationToUserGroup(req: SendNotificationGroupDto) {
-    const users = await this.repository.findUsers(req.users);
+        await this.repository.save({
+          message: `Сегодня у ${family.name} день рождения`,
+          user: family.userCreated.toString(),
+        });
 
-    if (users.length === 0) {
-      throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
-    }
+        const devices = await this.repository.findAll(
+          family.userCreated.toString(),
+        );
 
-    const info: ExpoPushMessage[] = users.map((item) => ({
-      to: item.token,
-      title: req.title,
-      body: req.message,
-    }));
+        const notification: ExpoPushMessage[] = devices.map((item) => ({
+          to: item.token,
+          title: 'Уведомление',
+          body: `Сегодня у ${family.name} день рождения`,
+        }));
 
-    await this.repository.saveHistoryToUserGroup(req);
-
-    try {
-      const ticket = await this.expo.sendPushNotificationsAsync(info);
-      console.log(ticket);
-      return ticket;
-    } catch (e) {
-      console.log(e);
+        await this.expo.sendPushNotificationsAsync(notification);
+      }
     }
   }
 }

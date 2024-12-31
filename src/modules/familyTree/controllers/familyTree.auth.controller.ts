@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -17,6 +18,9 @@ import { UpdateFamilyDto } from '../dto/update-family.dto';
 import { FamilyTreeService } from '../services/familyTree.service';
 import { CreateSpouseDto } from '../dto/create-spouse.dto';
 import { FamilyTreeMutationType, QueryFamilyType } from '../types/types';
+import { Request } from 'express';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Controller({
   version: '1',
@@ -26,7 +30,11 @@ import { FamilyTreeMutationType, QueryFamilyType } from '../types/types';
 @ApiTags('auth.familyTree')
 @ApiBearerAuth('access-token')
 export class FamilyTreeAuthController {
-  constructor(private readonly familyTreeService: FamilyTreeService) {}
+  constructor(
+    private readonly familyTreeService: FamilyTreeService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post('spouse')
   public createSpouse(
@@ -37,16 +45,33 @@ export class FamilyTreeAuthController {
   }
 
   @Post()
-  public create(@Body() createFamilyDto: CreateFamilyDto): Promise<FamilyTree> {
-    console.log('createFamilyDto', createFamilyDto);
-    return this.familyTreeService.create(createFamilyDto);
+  public async create(
+    @Body() createFamilyDto: CreateFamilyDto,
+    @Req() req: Request,
+  ): Promise<FamilyTree> {
+    const token = req.headers['authorization'].split(' ')[1];
+    const { _id } = await this.jwtService.verifyAsync(token, {
+      ignoreExpiration: true,
+      secret: this.configService.get('JWT_SECRET'),
+    });
+
+    return this.familyTreeService.create(createFamilyDto, _id);
   }
 
   @Get()
-  public findAllFamilyTree(
+  public async findAllFamilyTree(
     @Query('name') name: string,
+    @Req() req: Request,
   ): Promise<FamilyTreeMutationType[]> {
-    const query = {} as QueryFamilyType;
+    const token = req.headers['authorization'].split(' ')[1];
+    const { _id } = await this.jwtService.verifyAsync(token, {
+      ignoreExpiration: true,
+      secret: this.configService.get('JWT_SECRET'),
+    });
+
+    const query = {
+      userCreated: _id,
+    } as QueryFamilyType;
 
     if (name) {
       query['name'] = { $regex: `^${name}`, $options: 'i' };

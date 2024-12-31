@@ -32,17 +32,17 @@ export class AuthRepository {
 
   public async saveDeviceToken(token: string, id: string) {
     const deviceToken = await this.userDeviceRepository.findOne({
-      token: token,
+      user: id,
     });
 
     if (!deviceToken) {
-      await this.userDeviceRepository.create({
+      return this.userDeviceRepository.create({
         user: id,
         token: token,
       });
     }
 
-    await this.userDeviceRepository.findOneAndUpdate(
+    return this.userDeviceRepository.findOneAndUpdate(
       { token: token },
       { user: id },
     );

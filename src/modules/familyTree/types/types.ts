@@ -9,5 +9,5 @@ export interface FamilyTreeMutationType extends FamilyTreeType {
 }
 
 export interface QueryFamilyType {
-  name: { $regex: string; $options: string };
+  name?: { $regex: string; $options: string };
 }

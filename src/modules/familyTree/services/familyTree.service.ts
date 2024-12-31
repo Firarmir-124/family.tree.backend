@@ -32,8 +32,11 @@ export class FamilyTreeService {
     return this.familyTreeRepository.createSpouse(info, id);
   }
 
-  public async create(info: CreateFamilyDto): Promise<FamilyTree> {
-    return this.familyTreeRepository.createFamily(info);
+  public async create(
+    info: CreateFamilyDto,
+    userId: string,
+  ): Promise<FamilyTree> {
+    return this.familyTreeRepository.createFamily(info, userId);
   }
 
   public async findAllFamilyTree(

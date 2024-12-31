@@ -28,9 +28,15 @@ export class FamilyTreeRepository {
     }
   }
 
-  public async createFamily(family: CreateFamilyDto): Promise<FamilyTree> {
+  public async createFamily(
+    family: CreateFamilyDto,
+    userId: string,
+  ): Promise<FamilyTree> {
     try {
-      return this.familyTreeRepository.create(family);
+      return this.familyTreeRepository.create({
+        ...family,
+        userCreated: userId,
+      });
     } catch (e) {
       throw new HttpException(
         'ошибка сервера',
