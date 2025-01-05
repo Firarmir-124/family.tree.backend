@@ -9,6 +9,7 @@ import { NotificationModule } from '../../modules/notification/notification.modu
 import { NotificationController } from '../../modules/notification/controllers/notification.controller';
 import { NotificationService } from '../../modules/notification/services/notification.service';
 import { ChatModule } from '../../modules/chat/chat.module';
+import { UserAuthController } from '../../modules/user/controllers/user.auth.controller';
 
 @Module({
   imports: [UserModule, FamilyTreeModule, NotificationModule, ChatModule],
@@ -16,6 +17,7 @@ import { ChatModule } from '../../modules/chat/chat.module';
     AuthController,
     FamilyTreeAuthController,
     NotificationController,
+    UserAuthController,
   ],
   providers: [UserService, AuthService, NotificationService],
 })

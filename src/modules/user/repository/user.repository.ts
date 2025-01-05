@@ -4,6 +4,7 @@ import { User, UserEntity } from '../entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { IUser } from '../types';
 
 export class UserRepository {
   constructor(
@@ -31,7 +32,7 @@ export class UserRepository {
     }
   }
 
-  public async findOneUser(_id: string): Promise<User> {
+  public async findOneUser(_id: string): Promise<IUser> {
     try {
       return this.userRepository.findOne({ _id });
     } catch (e) {

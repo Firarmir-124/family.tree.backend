@@ -5,37 +5,26 @@ import {
   Get,
   Param,
   Patch,
-  Post,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserService } from '../services/user.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { User } from '../entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiCreateUser } from '../decorators/create-user.decorator';
 import { ApiFindOneUser } from '../decorators/findOne-user.decorator';
 import { ApiUpdateUser } from '../decorators/update-user.decorator';
 import { ApiDeleteUser } from '../decorators/delete-user.decorator';
-import { RolesGuard } from '../../../global/guards/role.guard';
 
 @Controller({
   version: '1',
   path: 'users',
 })
-@UseGuards(RolesGuard)
 @UseGuards(AuthGuard('jwt'))
-@ApiTags('admin.user')
+@ApiTags('auth.users')
 @ApiBearerAuth('access-token')
-export class UserAdminController {
+export class UserAuthController {
   constructor(private readonly userService: UserService) {}
-
-  @ApiCreateUser()
-  @Post()
-  public create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.create(createUserDto);
-  }
 
   @ApiFindOneUser()
   @Get(':id')

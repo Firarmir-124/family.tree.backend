@@ -80,19 +80,15 @@ export class AuthController {
       salt: salt,
     });
 
-    const userResponse = {
-      id: user.id,
-      ...registerUserDto,
-      createdAt: user.created,
-      updatedAt: user.updated,
-    };
-
     if (registerUserDto.token) {
       await this.authService.saveDeviceToken(registerUserDto.token, user.id);
     }
 
     const token = this.authService.generateToken(user);
 
-    return { token: token, user: userResponse };
+    delete user.password;
+    delete user.salt;
+
+    return { token: token, user: user };
   }
 }

@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { AuthService } from '../../auth/services/auth.service';
 import { User } from '../entities/user.entity';
@@ -12,13 +11,6 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly authService: AuthService,
   ) {}
-
-  public async create(info: CreateUserDto): Promise<User> {
-    const password = await this.authService.createPassword(info.password || '');
-    const { passwordHash, salt } = password;
-
-    return this.userRepository.createUser(info, passwordHash, salt);
-  }
 
   public async findOne(id: string): Promise<User> {
     const checkId = mongoose.Types.ObjectId.isValid(id);
@@ -49,13 +41,29 @@ export class UserService {
       throw new BadRequestException();
     }
 
+    console.log('userOne', userOne);
+
     const user: { salt: string } & UpdateUserDto = {
-      salt: userOne.salt,
       ...info,
+      salt: userOne.salt,
+      password: userOne.password,
     };
 
-    if (info.password) {
-      const password = await this.authService.createPassword(info.password);
+    console.log('info', info.password);
+
+    if (info.password && info.newPassword) {
+      console.log(info.password);
+      const checkPassword = await this.authService.isPasswordValid(
+        info.password,
+        userOne.password,
+        user.salt,
+      );
+
+      if (!checkPassword) {
+        throw new BadRequestException(`Не верный пароль`);
+      }
+
+      const password = await this.authService.createPassword(info.newPassword);
       user.password = password.passwordHash;
       user.salt = password.salt;
     }

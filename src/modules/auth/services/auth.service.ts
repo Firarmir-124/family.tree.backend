@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 import { HelperHashService } from '../../../helpers/services/helper.hash.service';
@@ -16,6 +16,15 @@ export class AuthService {
   ) {
     this.passwordSaltLength =
       +this.configService.get<number>('PASSWORD_SALT') || 10;
+  }
+
+  public async isPasswordValid(
+    enteredPassword: string,
+    storedPasswordHash: string,
+    salt: string,
+  ): Promise<boolean> {
+    const hashedPassword = this.helperHashService.bcrypt(enteredPassword, salt);
+    return hashedPassword === storedPasswordHash;
   }
 
   public async validateUser(email: string, pass: string): Promise<any> {
