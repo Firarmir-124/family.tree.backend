@@ -32,11 +32,8 @@ export class FamilyTreeService {
     return this.familyTreeRepository.createSpouse(info, id);
   }
 
-  public async create(
-    info: CreateFamilyDto,
-    userId: string,
-  ): Promise<FamilyTree> {
-    return this.familyTreeRepository.createFamily(info, userId);
+  public async create(info: CreateFamilyDto, id: string): Promise<FamilyTree> {
+    return this.familyTreeRepository.createFamily(info, id);
   }
 
   public async findAllFamilyTree(
@@ -66,6 +63,7 @@ export class FamilyTreeService {
             spouse: item.spouse,
             created: item.created,
             updated: item.updated,
+            queue: item.queue,
           };
           return {
             ...newItem,
@@ -121,6 +119,22 @@ export class FamilyTreeService {
     }
 
     return this.familyTreeRepository.updateFamily(id, info);
+  }
+
+  public async updateFamilyQueue(
+    id: string,
+    payload: {
+      queue: boolean;
+      userCreated: string;
+    },
+  ): Promise<FamilyTree> {
+    const checkId = mongoose.Types.ObjectId.isValid(id);
+
+    if (!checkId) {
+      throw new BadRequestException();
+    }
+
+    return this.familyTreeRepository.updateFamilyQueue(id, payload);
   }
 
   public async remove(id: string): Promise<string> {

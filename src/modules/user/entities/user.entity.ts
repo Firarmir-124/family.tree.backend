@@ -5,6 +5,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 @Schema()
 export class User extends Base {
   @ApiProperty()
+  @Prop({ type: String, required: true })
+  name: string;
+
+  @ApiProperty()
   @Prop({ type: String, required: false })
   address: string;
 

@@ -6,6 +6,11 @@ export class CreateUserDto {
   readonly address?: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  readonly name: string;
+
+  @ApiProperty()
   @IsOptional()
   @IsString()
   readonly phone?: string;

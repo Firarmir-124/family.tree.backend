@@ -30,12 +30,12 @@ export class FamilyTreeRepository {
 
   public async createFamily(
     family: CreateFamilyDto,
-    userId: string,
+    id: string,
   ): Promise<FamilyTree> {
     try {
       return this.familyTreeRepository.create({
         ...family,
-        userCreated: userId,
+        userCreated: family.userCreated ? family.userCreated : id,
       });
     } catch (e) {
       throw new HttpException(
@@ -75,6 +75,24 @@ export class FamilyTreeRepository {
   ): Promise<FamilyTree> {
     try {
       await this.familyTreeRepository.updateOne({ _id }, { $set: info });
+      return this.familyTreeRepository.findOne({ _id });
+    } catch (e) {
+      throw new HttpException(
+        'ошибка сервера',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  public async updateFamilyQueue(
+    _id: string,
+    payload: {
+      queue: boolean;
+      userCreated: string;
+    },
+  ): Promise<FamilyTree> {
+    try {
+      await this.familyTreeRepository.updateOne({ _id }, { $set: payload });
       return this.familyTreeRepository.findOne({ _id });
     } catch (e) {
       throw new HttpException(

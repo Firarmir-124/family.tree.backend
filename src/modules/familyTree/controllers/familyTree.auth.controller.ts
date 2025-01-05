@@ -61,6 +61,7 @@ export class FamilyTreeAuthController {
   @Get()
   public async findAllFamilyTree(
     @Query('name') name: string,
+    @Query('userId') userId: string,
     @Req() req: Request,
   ): Promise<FamilyTreeMutationType[]> {
     const token = req.headers['authorization'].split(' ')[1];
@@ -70,7 +71,7 @@ export class FamilyTreeAuthController {
     });
 
     const query = {
-      userCreated: _id,
+      userCreated: !userId ? _id : userId,
     } as QueryFamilyType;
 
     if (name) {

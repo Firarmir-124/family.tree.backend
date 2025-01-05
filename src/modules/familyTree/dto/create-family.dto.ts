@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  isArray,
+  IsBoolean,
   IsNotEmpty,
   IsObject,
   IsOptional,
@@ -52,4 +52,14 @@ export class CreateFamilyDto {
   @IsOptional()
   @IsString()
   readonly parent: string;
+
+  @ApiProperty({ example: 'userCreated', description: 'userCreated' })
+  @IsOptional()
+  @IsString()
+  readonly userCreated: string;
+
+  @ApiProperty({ example: 'queue', description: 'queue' })
+  @IsOptional()
+  @IsBoolean()
+  readonly queue: boolean;
 }

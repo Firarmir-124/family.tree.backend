@@ -56,6 +56,10 @@ export class FamilyTree extends Base {
   @ApiProperty()
   @Prop({ type: Types.ObjectId, ref: User.name, required: false })
   userCreated: User;
+
+  @ApiProperty()
+  @Prop({ required: false, default: false })
+  queue: boolean;
 }
 
 export const FamilyTreeEntity = {

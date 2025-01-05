@@ -8,9 +8,10 @@ import { FamilyTreeAuthController } from '../../modules/familyTree/controllers/f
 import { NotificationModule } from '../../modules/notification/notification.module';
 import { NotificationController } from '../../modules/notification/controllers/notification.controller';
 import { NotificationService } from '../../modules/notification/services/notification.service';
+import { ChatModule } from '../../modules/chat/chat.module';
 
 @Module({
-  imports: [UserModule, FamilyTreeModule, NotificationModule],
+  imports: [UserModule, FamilyTreeModule, NotificationModule, ChatModule],
   controllers: [
     AuthController,
     FamilyTreeAuthController,

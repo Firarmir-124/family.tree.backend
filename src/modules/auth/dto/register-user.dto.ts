@@ -17,6 +17,11 @@ export class RegisterUserDto {
   @IsString()
   readonly address: string;
 
+  @ApiProperty({ example: 'name' })
+  @IsNotEmpty()
+  @IsString()
+  readonly name: string;
+
   @ApiProperty({ example: 'phone' })
   @IsOptional()
   @IsString()
