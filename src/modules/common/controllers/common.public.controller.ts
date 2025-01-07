@@ -1,12 +1,10 @@
 import {
   Body,
   Controller,
-  Delete,
-  Get,
   Param,
+  Patch,
   Post,
   Put,
-  Query,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -33,6 +31,7 @@ export class CommonPublicController {
   async removeFile(
     @Body('filename') filename: string[],
   ): Promise<DeleteResult> {
+    console.log('test');
     return this.commonService.removeFile(filename);
   }
 
@@ -45,27 +44,10 @@ export class CommonPublicController {
     return this.commonService.updateFile(filename, file);
   }
 
-  @Get('general-data')
-  async getGeneralData(@Query('file') file: string | null) {
-    return this.commonService.getGeneralData(file);
-  }
-
-  @Post('general-data')
-  async createGeneralData(
-    @Body('generalData') generalData: CreateGeneralDataDto,
-  ) {
-    return this.commonService.createGeneralData(generalData);
-  }
-
-  @Delete('general-data/delete/:id')
-  async deleteGeneralData(@Param('id') id: string): Promise<DeleteResult> {
-    return this.commonService.deleteGeneralData(id);
-  }
-
-  @Put('general-data/update/:id')
+  @Patch('general-data/update/:id')
   async updateGeneralData(
     @Param('id') id: string,
-    @Body('generalData') generalData: CreateGeneralDataDto,
+    @Body('generalData') generalData: string,
   ) {
     return this.commonService.updateGeneralData(id, generalData);
   }

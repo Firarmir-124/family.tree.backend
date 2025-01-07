@@ -10,15 +10,25 @@ import { NotificationController } from '../../modules/notification/controllers/n
 import { NotificationService } from '../../modules/notification/services/notification.service';
 import { ChatModule } from '../../modules/chat/chat.module';
 import { UserAuthController } from '../../modules/user/controllers/user.auth.controller';
+import { GalleryModule } from '../../modules/gallery/gallery.module';
+import { GalleryController } from '../../modules/gallery/controllers/gallery.controller';
+import { GalleryService } from '../../modules/gallery/services/gallery.service';
 
 @Module({
-  imports: [UserModule, FamilyTreeModule, NotificationModule, ChatModule],
+  imports: [
+    UserModule,
+    FamilyTreeModule,
+    NotificationModule,
+    ChatModule,
+    GalleryModule,
+  ],
   controllers: [
     AuthController,
     FamilyTreeAuthController,
     NotificationController,
     UserAuthController,
+    GalleryController,
   ],
-  providers: [UserService, AuthService, NotificationService],
+  providers: [UserService, AuthService, NotificationService, GalleryService],
 })
 export class RouteAuthModule {}
