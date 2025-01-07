@@ -33,27 +33,28 @@ export class CommonService {
     }[] = [];
 
     const folder = this.configService.get('IMAGE_FOLDER');
+
     try {
-      // Создаем директорию, если ее нет
-      await fs.promises.mkdir(folder, { recursive: true });
-
       for (const file of files) {
-        const name = uuidv4();
-        const newFilename = name + path.extname(file.originalname);
+        const name =
+          Math.random().toString(36).substring(2, 15) +
+          Math.random().toString(36).substring(2, 15);
 
-        const newFilePath = path.join(folder, name, newFilename);
+        const filename =
+          path.join(folder, name[0] + name[1], name[2] + name[3], name) +
+          path.extname(file.originalname);
 
         // Чтение файла и запись в новое место
         const data = await fs.promises.readFile(file.path);
-        await fs.promises.mkdir(path.dirname(newFilePath), { recursive: true });
-        await fs.promises.writeFile(newFilePath, data);
+        await fs.promises.mkdir(path.dirname(filename), { recursive: true });
+        await fs.promises.writeFile(filename, data);
         console.log('File copied successfully');
 
         // Добавление информации о файле в массив для базы данных
         uploadsFile.push({
           type: file.mimetype,
           name: file.fieldname,
-          path: '/' + newFilePath.replaceAll('\\', '/'), // Путь с прямыми слэшами
+          path: '/' + filename.replaceAll('\\', '/'), // Путь с прямыми слэшами
         });
       }
 
