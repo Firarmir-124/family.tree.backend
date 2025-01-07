@@ -31,6 +31,10 @@ export class User extends Base {
   @ApiHideProperty()
   @Prop({ type: String })
   salt: string;
+
+  @ApiHideProperty()
+  @Prop({ type: String, required: false })
+  photo: string;
 }
 
 export const UserEntity = {

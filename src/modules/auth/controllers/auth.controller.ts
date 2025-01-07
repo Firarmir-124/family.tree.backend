@@ -78,6 +78,7 @@ export class AuthController {
       ...registerUserDto,
       password: passwordHash,
       salt: salt,
+      photo: null,
     });
 
     if (registerUserDto.token) {
