@@ -5,6 +5,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { HelperModule } from './helpers/helper.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './modules/auth/auth.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -32,7 +34,8 @@ import { AuthModule } from './modules/auth/auth.module';
     RouterModule.forRoot(),
     AuthModule,
   ],
-  controllers: [],
-  providers: [],
+
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

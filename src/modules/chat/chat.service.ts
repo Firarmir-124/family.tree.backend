@@ -29,7 +29,7 @@ export class ChatService {
     const tokenUser = client.handshake.auth['authorization'];
 
     // if (!token) {
-    //   client.disconnect();
+    //   public.disconnect();
     //   return;
     // }
 
@@ -71,7 +71,7 @@ export class ChatService {
     // );
     //
     // if (checkOwner) {
-    //   client.to('room').emit(
+    //   public.to('room').emit(
     //     'ROOM',
     //     JSON.stringify({
     //       action: 'ROOM',

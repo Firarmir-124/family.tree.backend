@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React с MUI</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@mui/material@latest/umd/material-ui.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@emotion/react@latest/umd/emotion-react.umd.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@emotion/styled@latest/umd/emotion-styled.umd.min.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+  <title>Tree Family</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 5rem;
+      padding: 0 1rem;
+    }
+
+    .card {
+      background-color: #333;
+      color: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .card h4 {
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+    }
+
+    .card .subtitle {
+      margin-bottom: 2rem;
+      color: #bbb;
+    }
+
+    .card .warning {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      font-weight: bold;
+      color: red;
+    }
+
+    .list {
+      text-align: left;
+      font-size: 18px;
+    }
+
+    .list-item {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <h4>Tree Family</h4>
+    <p class="subtitle">Developer: Adiev Bogdan</p>
+    <p class="warning">Warning! After deleting your account, all your data will be lost and cannot be recovered.</p>
+    <div class="list">
+      <ul>
+        <li class="list-item">1. Open the app – launch it on your device.</li>
+        <li class="list-item">2. Go to your profile – usually, you need to tap the profile icon at the bottom corner of the screen.</li>
+        <li class="list-item">3. Scroll down – on the profile page, scroll all the way down.</li>
+        <li class="list-item">4. Find the "Delete Account" button – it should be at the very bottom of the screen.</li>
+        <li class="list-item">5. Tap the button – a confirmation window may appear.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

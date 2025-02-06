@@ -20,7 +20,9 @@ async function bootstrap() {
   const logger = new Logger('bootstrap');
   app.enableCors();
   const configService = app.get(ConfigService);
+  // @ts-ignore
   await app.register(fastifyCsrf);
+  // @ts-ignore
   await app.register(multipart);
   // public assets
   app.useStaticAssets({
@@ -41,6 +43,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   logger.log(`starting in port: ${configService.get('PORT', 3000)}`);
+
   await app.listen(configService.get('PORT', 3000));
 }
 bootstrap();
