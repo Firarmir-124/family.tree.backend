@@ -1,12 +1,10 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RouterModule } from './router/router.module';
-import { MulterModule } from '@nestjs/platform-express';
-import { HelperModule } from './helpers/helper.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './modules/auth/auth.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import {Module} from '@nestjs/common';
+import {ConfigModule, ConfigService} from '@nestjs/config';
+import {RouterModule} from './router/router.module';
+import {MulterModule} from '@nestjs/platform-express';
+import {HelperModule} from './helpers/helper.module';
+import {MongooseModule} from '@nestjs/mongoose';
+import {AuthModule} from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -35,7 +33,7 @@ import { AppService } from './app.service';
     AuthModule,
   ],
 
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

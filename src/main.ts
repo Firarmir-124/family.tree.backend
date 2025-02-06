@@ -52,6 +52,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   logger.log(`starting in port: ${configService.get('PORT', 3000)}`);
 
-  await app.listen(configService.get('PORT', 3000));
+  await app.listen(configService.get('PORT', 3000), '0.0.0.0');
 }
 bootstrap();
