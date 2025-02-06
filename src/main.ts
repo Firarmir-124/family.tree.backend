@@ -9,13 +9,21 @@ import fastifyCsrf from '@fastify/csrf-protection';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import multipart from '@fastify/multipart';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import * as fs from 'fs';
 
 export const ROOT = __dirname;
 
 async function bootstrap() {
+  const httpsOptions = {
+    key: fs.readFileSync('/etc/letsencrypt/live/tree.wiskg.tech/privkey.pem'),
+    cert: fs.readFileSync(
+      '/etc/letsencrypt/live/tree.wiskg.tech/fullchain.pem',
+    ),
+  };
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({ https: httpsOptions }),
   );
   const logger = new Logger('bootstrap');
   app.enableCors();
